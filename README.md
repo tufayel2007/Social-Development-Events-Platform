@@ -1,16 +1,96 @@
-# React + Vite
+Social Development Events Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+একটি কমিউনিটি-চালিত ইভেন্ট ম্যানেজমেন্ট প্ল্যাটফর্ম যেখানে ইউজাররা সামাজিক সেবামূলক ইভেন্ট তৈরি, জয়েন এবং ট্র্যাক করতে পারে।
 
-Currently, two official plugins are available:
+উদাহরণ:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- "Road Cleaning in Mirpur 10, Dhaka"
+- "Tree Plantation - Hossainpur, Kishoreganj"
 
-## React Compiler
+লাইভ সাইট: https://social-dev-events.netlify.app
+(এই লিংকটি তোমার নেটলিফাই/ফায়ারবেস লিংক দিয়ে বদলে দিবে)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+মূল ফিচারস:
+১. ইভেন্ট তৈরি করুন (লগইন থাকলে)
 
-## Expanding the ESLint configuration
+- টাইটেল, ডেসক্রিপশন, টাইপ (ক্লিনআপ, প্ল্যান্টেশন, ডোনেশন)
+- থাম্বনেইল, লোকেশন, ভবিষ্যত তারিখ (react-datepicker)
+- পাস্ট ডেট ব্লক করা
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+২. আসন্ন ইভেন্টস (পাবলিক)
+
+- গ্রিড লেআউটে সব ভবিষ্যত ইভেন্ট
+- ফিল্টার: ইভেন্ট টাইপ (MongoDB/Firebase Query)
+- সার্চ: নাম দিয়ে খুঁজুন
+- ভিউ + জয়েন বাটন
+
+৩. জয়েন করা ইভেন্টস (প্রাইভেট)
+
+- লগইন ইউজারের জয়েন করা সব ইভেন্ট
+- তারিখ অনুযায়ী সর্ট করা
+
+৪. ম্যানেজ ইভেন্টস (প্রাইভেট)
+
+- নিজের তৈরি ইভেন্ট দেখুন ও আপডেট করুন
+- শুধু নিজের ইভেন্ট এডিট/ডিলিট করা যায়
+
+৫. লগইন / রেজিস্টার
+
+- ইমেইল + পাসওয়ার্ড
+- গুগল লগইন
+- পাসওয়ার্ড: আপারকেস, লোয়ারকেস, ৬+ অক্ষর
+- টোস্ট মেসেজ (React-Toastify)
+
+৬. নেভবার
+
+- লোগো, আসন্ন ইভেন্টস
+- লগইন/লগআউট
+- প্রোফাইল পিকচার + ড্রপডাউন (নাম, ক্রিয়েট, ম্যানেজ, জয়েনড)
+
+৭. হোম পেজ
+
+- ব্যানার, ফিচারস, গ্যালারি (স্ট্যাটিক), নিউজলেটার
+
+৮. ডার্ক/লাইট মোড টগল
+
+- পুরো সাইটে কাজ করে
+
+৯. অ্যানিমেশন
+
+- Framer Motion দিয়ে স্মুথ ট্রানজিশন
+
+১০. রেসপন্সিভ - মোবাইল, ট্যাবলেট, ডেস্কটপ সব ডিভাইসে পারফেক্ট
+
+টেক স্ট্যাক:
+
+- React.js, Tailwind CSS, Framer Motion
+- Firebase (Auth + Firestore)
+- React Router, React Datepicker
+- React-Toastify, TanStack Query (Optional)
+
+গিটহাব:
+
+- ক্লায়েন্ট: ১৮+ কমিট
+- সার্ভার: ১০+ কমিট (Firebase Rules, Indexes)
+
+ডিপ্লয়মেন্ট:
+
+- ক্লায়েন্ট: Netlify / Firebase Hosting
+- সার্ভার: Firebase (Vercel optional)
+
+ইউনিক ডিজাইন:
+
+- কোনো লোরেম ইপ্সাম নেই
+- সব কার্ড সমান উচ্চতা
+- বাটন স্টাইল একই
+- ফন্ট, স্পেসিং, অ্যালাইনমেন্ট কনসিসটেন্ট
+- নতুন X লোগো ব্যবহৃত
+
+অতিরিক্ত:
+
+- লোডিং স্পিনার
+- প্রাইভেট রুটে রিলোডে লগইন থাকে
+- কোনো এরর নেই
+
+তৈরি করেছেন: [তোমার নাম]
+তারিখ: ০৯ নভেম্বর, ২০২৫
