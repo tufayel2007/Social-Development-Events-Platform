@@ -112,13 +112,13 @@ const Home = () => {
     {
       icon: "Handshake",
       title: "সম্প্রদায় গঠন",
-      desc: "মিলনমে",
+      desc: "মিলনমেলা আয়োজন",
       color: "teal",
     },
     {
       icon: "Globe",
       title: "জলবায়ু সচেতনতা",
-      desc: "পরিবেশ শিক্ষা",
+      desc: "পরিবেশ ",
       color: "green",
     },
     {
