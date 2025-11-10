@@ -134,7 +134,7 @@ const CreateEvent = () => {
             নতুন ইভেন্ট তৈরি করুন
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            সমাজের জন্য একটি নতুন উদ্যোগ
+            সমাজের জন্য একটি নতুন উদ্যোগ শুরু করুন
           </p>
         </div>
 
