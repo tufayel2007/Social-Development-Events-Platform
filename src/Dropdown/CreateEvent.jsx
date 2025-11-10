@@ -116,7 +116,7 @@ const CreateEvent = () => {
       navigate("/ManageEvents", { state: { refresh: true } });
     } catch (err) {
       console.error("Event Creation Error:", err);
-      Swal.fire("Error", `ইভেন্ট র্থ: ${err.message}`, "error");
+      Swal.fire("Error", `ইভেন্ট তৈরি ব্যর্থ: ${err.message}`, "error");
     } finally {
       setLoading(false);
     }
