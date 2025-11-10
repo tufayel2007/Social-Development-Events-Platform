@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/pages/private/ManageEvents.jsx
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +14,7 @@ import { useInView } from "react-intersection-observer";
 // Icons (react-icons)
 import { FiEdit3, FiEye, FiTrash2, FiRefreshCw, FiPlus } from "react-icons/fi";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const ManageEvents = () => {
   const { user, loading: authLoading } = useAuth();
@@ -289,7 +290,7 @@ const EventCard = React.memo(
         <div className="relative overflow-hidden">
           <img
             src={
-              event.thumbnail1 ||
+              event.thumbnail ||
               "https://via.placeholder.com/300x200?text=No+Image"
             }
             alt={event.title}

@@ -1,0 +1,19 @@
+mutation CreateUser @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  user_insert(data: { username: "demouser", email: "demo@example.com", createdAt_expr: "request.time" })
+}
+
+query ListNotes @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  notes {
+    id
+    title
+    content
+  }
+}
+
+mutation UpdateNote($id: UUID!, $content: String!) @auth(level: USER) {
+  note_update(key: { id: $id }, data: { content: $content, updatedAt_expr: "request.time" })
+}
+
+mutation DeleteNote($id: UUID!) @auth(level: USER) {
+  note_delete(key: { id: $id })
+}

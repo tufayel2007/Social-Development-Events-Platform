@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -22,13 +22,18 @@ const CreateEvent = () => {
 
   // লগইন না থাকলে রিডাইরেক্ট
   useEffect(() => {
-    if (!auth.currentUser) {
-      Swal.fire({
-        icon: "warning",
-        title: "লগইন করুন",
-        text: "ইভেন্ট তৈরি করতে লগইন করতে হবে",
-      }).then(() => navigate("/login"));
-    }
+    // 💡 Firebase-এর অ্যাসিঙ্ক প্রকৃতি নিশ্চিত করতে setTimeout ব্যবহার করুন
+    const timer = setTimeout(() => {
+      if (!auth.currentUser) {
+        Swal.fire({
+          icon: "warning",
+          title: "লগইন করুন",
+          text: "ইভেন্ট তৈরি করতে লগইন করতে হবে",
+        }).then(() => navigate("/login"));
+      }
+    }, 1000); // 1 সেকেন্ড অপেক্ষা করা হলো
+
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   const handleSubmit = async (e) => {
@@ -76,7 +81,8 @@ const CreateEvent = () => {
       title: title.trim(),
       description: description.trim(),
       eventType,
-      thumbnail1: thumbnail.trim(),
+      // 💡 আপডেট: 'thumbnail1' পরিবর্তন করে 'thumbnail' করা হলো
+      thumbnail: thumbnail.trim(),
       location: location.trim(),
       eventDate: eventDate.toISOString(),
       creatorEmail: creatorEmail, // এটাই সঠিক ইমেইল!
@@ -114,7 +120,9 @@ const CreateEvent = () => {
 
       navigate("/ManageEvents", { state: { refresh: true } });
     } catch (err) {
-      Swal.fire("Error", err.message, "error");
+      // 💡 ত্রুটি আরও স্পষ্ট করে দেখানো
+      console.error("Event Creation Error:", err);
+      Swal.fire("Error", `ইভেন্ট তৈরি ব্যর্থ: ${err.message}`, "error");
     } finally {
       setLoading(false);
     }
@@ -129,15 +137,15 @@ const CreateEvent = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden relative">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-green-700 mb-4 **dark:text-green-400**">
+          <h1 className="text-5xl font-bold text-green-700 mb-4 dark:text-green-400">
             নতুন ইভেন্ট তৈরি করুন
           </h1>
-          <p className="text-xl text-gray-600 **dark:text-gray-400**">
+          <p className="text-xl text-gray-600 dark:text-gray-400">
             সমাজের জন্য একটি নতুন উদ্যোগ শুরু করুন
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-10 **dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700**">
+        <div className="bg-white rounded-3xl shadow-2xl p-10 dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* ১. ইভেন্টের নাম */}
             <input
@@ -145,7 +153,7 @@ const CreateEvent = () => {
               placeholder="ইভেন্টের নাম *"
               value={formData.title}
               onChange={(e) => handleChange("title")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               required
             />
 
@@ -155,7 +163,7 @@ const CreateEvent = () => {
               rows="5"
               value={formData.description}
               onChange={(e) => handleChange("description")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg resize-none **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg resize-none text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               required
             />
 
@@ -163,22 +171,22 @@ const CreateEvent = () => {
             <select
               value={formData.eventType}
               onChange={(e) => handleChange("eventType")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600"
               required
             >
-              <option value="" className="**dark:bg-gray-700**">
+              <option value="" className="dark:bg-gray-700">
                 -- ইভেন্টের ধরন বাছাই করুন --
               </option>
-              <option value="Education" className="**dark:bg-gray-700**">
+              <option value="Education" className="dark:bg-gray-700">
                 শিক্ষা
               </option>
-              <option value="Cleanup" className="**dark:bg-gray-700**">
+              <option value="Cleanup" className="dark:bg-gray-700">
                 পরিচ্ছন্নতা অভিযান
               </option>
-              <option value="Plantation" className="**dark:bg-gray-700**">
+              <option value="Plantation" className="dark:bg-gray-700">
                 গাছ লাগানো
               </option>
-              <option value="Donation" className="**dark:bg-gray-700**">
+              <option value="Donation" className="dark:bg-gray-700">
                 দান সংগ্রহ
               </option>
             </select>
@@ -189,7 +197,7 @@ const CreateEvent = () => {
               placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
               value={formData.thumbnail}
               onChange={(e) => handleChange("thumbnail")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               required
             />
 
@@ -199,7 +207,7 @@ const CreateEvent = () => {
               placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
               value={formData.location}
               onChange={(e) => handleChange("location")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               required
             />
 
@@ -212,7 +220,7 @@ const CreateEvent = () => {
               dateFormat="dd MMMM, yyyy - h:mm aa"
               minDate={new Date()}
               placeholderText="তারিখ ও সময় বাছাই করুন *"
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg **text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
+              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               required
             />
 

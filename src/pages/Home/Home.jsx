@@ -1,21 +1,23 @@
-// src/pages/Home/Home.jsx
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 
-// Placeholder Images (আসল ছবি দিয়ে বদলাবে)
 import bannerImg from "../../assets/bannerImg.png";
-import gallery1 from "../../assets/bannerImg.png";
-import gallery2 from "../../assets/bannerImg.png";
-import gallery3 from "../../assets/bannerImg.png";
-import gallery4 from "../../assets/bannerImg.png";
-import gallery5 from "../../assets/bannerImg.png";
-import gallery6 from "../../assets/bannerImg.png";
-import avatar1 from "../../assets/bannerImg.png";
-import avatar2 from "../../assets/bannerImg.png";
-import avatar3 from "../../assets/bannerImg.png";
+import gallery1 from "../../assets/Trre01.png";
+import gallery2 from "../../assets/Trre02.png";
+import gallery3 from "../../assets/Bloud01.png";
+import gallery4 from "../../assets/Dustiben.png";
+import gallery5 from "../../assets/Environment.png";
+import gallery6 from "../../assets/Madecaltem.png";
+import gallery7 from "../../assets/Bookk.png";
+import gallery8 from "../../assets/Food.png";
+import avatar1 from "../../assets/Rahim.png";
+import avatar2 from "../../assets/Fatema.png";
+import avatar3 from "../../assets/Kamrool.png";
 
 const Home = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -26,7 +28,6 @@ const Home = () => {
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
 
-  // Dark Mode Toggle
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -35,7 +36,6 @@ const Home = () => {
     }
   }, [darkMode]);
 
-  // Stats Counter with useInView
   const [statsRef, statsInView] = useInView({
     threshold: 0.3,
     triggerOnce: true,
@@ -48,7 +48,6 @@ const Home = () => {
     { end: 98, label: "সন্তুষ্টি", suffix: "%" },
   ];
 
-  // Features
   const features = [
     {
       icon: "Environment",
@@ -150,8 +149,8 @@ const Home = () => {
     gallery4,
     gallery5,
     gallery6,
-    gallery1,
-    gallery2,
+    gallery7,
+    gallery8,
   ];
 
   // Testimonials
@@ -180,7 +179,7 @@ const Home = () => {
   const faqs = [
     {
       q: "কিভাবে ইভেন্ট তৈরি করব?",
-      a: "ড্যাশবোর্ডে গিয়ে 'নতুন ইভেন্ট' বাটনে ক্লিক করুন।",
+      a: "প্রথমেই লগইন করুন পরে আপনার প্রোফাইলে ক্লিক করুন, পরে আপনার পছন্দমত অপশন সিলেক্ট করুন ।",
     },
     { q: "ইভেন্টে জয়েন করতে কি লাগবে?", a: "শুধু একটি অ্যাকাউন্ট এবং ইচ্ছা!" },
     { q: "এটা কি ফ্রি?", a: "হ্যাঁ, সম্পূর্ণ ফ্রি।" },
@@ -194,7 +193,6 @@ const Home = () => {
           : "bg-gradient-to-b from-green-50 to-white"
       }`}
     >
-      {/* Floating CTA */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -210,21 +208,21 @@ const Home = () => {
         </Link>
       </motion.div>
 
-      {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-emerald-600 z-50 origin-left"
         style={{ scaleX: scrollYProgress }}
       />
 
-      {/* Dark Mode Toggle */}
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="fixed top-6 right-6 z-50 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 transition-all"
+        className="fixed top-1/2 right-6 -translate-y-1/2 z-50 
+             p-4 bg-white dark:bg-gray-800 rounded-full shadow-lg 
+             hover:scale-110 hover:rotate-12 transition-all duration-300 ease-in-out 
+             text-xl font-bold"
       >
-        {darkMode ? "Sun" : "Moon"}
+        {darkMode ? "☀️" : "🌙"}
       </button>
 
-      {/* 1. Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div
           style={{ scale: scaleProgress, opacity: opacityProgress }}
@@ -245,13 +243,13 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            একসাথে গড়ি <span className="text-emerald-400">সুন্দর সমাজ</span>
+            একসাথে <span className="text-emerald-400"> গড়ি সুন্দর সমাজ</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xl md:text-2xl text-emerald-100 mb-8"
+            className="text-xl md:text-2xl text-black mb-8"
           >
             স্থানীয় পরিবেশ, শিক্ষা, স্বাস্থ্য — সবই এক ক্লিকে!
           </motion.p>
@@ -262,13 +260,13 @@ const Home = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              to="/upcomingEvents"
+              to="/CreateEvent"
               className="px-10 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full shadow-xl transform hover:scale-105 transition-all"
             >
               আজই শুরু করুন
             </Link>
             <Link
-              to="/about"
+              to="/upcomingEvents"
               className="px-10 py-4 bg-white/20 backdrop-blur-sm text-white font-bold text-lg rounded-full border-2 border-white hover:bg-white hover:text-emerald-600 transition-all"
             >
               আরও জানুন
@@ -286,13 +284,12 @@ const Home = () => {
               Green ২ ঘণ্টা আগে: ৫০+ গাছ লাগানো হয়েছে
             </span>
             <span className="mx-4">
-              Green নতুন ইভেন্ট: রক্তদান ক্যাম্প, ১২ নভেম্বর
+              Green নতুন ইভেন্ট: রক্তদান ক্যাম্প, ২৯ নভেম্বর
             </span>
           </div>
         </div>
       </section>
 
-      {/* 2. Stats Section */}
       <section
         ref={statsRef}
         className="py-20 px-6 bg-emerald-50 dark:bg-gray-800"
@@ -319,7 +316,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. Features Grid */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.h2
@@ -359,7 +355,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. Gallery with Lightbox */}
       <section className="py-20 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2
@@ -383,7 +378,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Lightbox */}
           {selectedImage && (
             <div
               className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
@@ -402,7 +396,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. Testimonials */}
       <section className="py-20 px-6 bg-emerald-600">
         <div className="max-w-5xl mx-auto">
           <motion.h2
@@ -440,7 +433,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 6. FAQ Accordion */}
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <motion.h2
@@ -470,7 +462,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 7. Newsletter */}
       <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 to-teal-600">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
@@ -513,7 +504,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Marquee Animation */}
       <style jsx>{`
         @keyframes marquee {
           0% {

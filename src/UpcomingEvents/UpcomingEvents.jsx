@@ -1,14 +1,26 @@
-// src/pages/UpcomingEvents.jsx
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { bn } from "date-fns/locale";
 import { toast, Toaster } from "react-hot-toast";
-import Swal from "sweetalert2";
-import QRCode from "qrcode";
-import { useInView } from "react-intersection-observer";
+import {
+  Search,
+  Filter,
+  X,
+  Moon,
+  Sun,
+  Calendar,
+  MapPin,
+  Sparkles,
+  Loader2,
+  ChevronLeft, // Added for pagination
+  ChevronRight, // Added for pagination
+} from "lucide-react";
+import { auth, onAuthStateChanged } from "../firebase/FirebaseConfig";
 
+// --- Constants ---
 const eventTypes = [
   { value: "", label: "সব ধরন" },
   { value: "Education", label: "শিক্ষা" },
@@ -17,57 +29,149 @@ const eventTypes = [
   { value: "Donation", label: "দান সংগ্রহ" },
 ];
 
-// Event Card
-const EventCard = React.memo(({ event, index }) => {
-  const [qrCode, setQrCode] = useState("");
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
-  const eventUrl = `${window.location.origin}/event/${event._id}`;
+const EVENTS_PER_PAGE = 6;
+
+const FullPageLoader = () => (
+  <motion.div
+    initial={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.6 }}
+    className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-teal-900"
+  >
+    <div className="text-center">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        className="mb-8"
+      >
+        <div className="w-24 h-24 mx-auto bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl">
+          <Sparkles className="w-12 h-12 text-white animate-pulse" />
+        </div>
+      </motion.div>
+      <motion.h2
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-3xl font-bold text-green-700 dark:text-green-400"
+      >
+        ইভেন্ট লোড হচ্ছে...
+      </motion.h2>
+      <motion.p
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="text-gray-600 dark:text-gray-300 mt-4"
+      >
+        একটু অপেক্ষা করুন
+      </motion.p>
+    </div>
+  </motion.div>
+);
+
+const ShimmerLoader = () => (
+  <div className="relative overflow-hidden rounded-3xl bg-white/80 dark:bg-gray-800/90 shadow-xl border border-gray-200 dark:border-gray-700">
+    <div className="h-64 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700 animate-shimmer"></div>
+    <div className="p-6 space-y-4">
+      <div className="flex justify-between">
+        <div className="h-7 w-48 bg-gray-200 dark:bg-gray-700 rounded-full animate-shimmer"></div>
+        <div className="h-7 w-20 bg-emerald-200 dark:bg-emerald-800 rounded-full animate-shimmer"></div>
+      </div>
+      <div className="space-y-3">
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-shimmer"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6 animate-shimmer"></div>
+      </div>
+      <div className="h-12 bg-gradient-to-r from-green-400 to-emerald-400 rounded-xl animate-shimmer"></div>
+    </div>
+  </div>
+);
+
+const ProtectedEventLink = ({ eventId, children }) => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (inView) {
-      QRCode.toDataURL(eventUrl, { width: 200 }).then(setQrCode);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (!user) {
+      toast.error("ইভেন্ট দেখতে লগইন করুন!", {
+        icon: "🔒",
+        duration: 3000,
+        style: { background: "#ef4444", color: "white" },
+      });
+      navigate("/login");
+    } else {
+      navigate(`/event/${eventId}`);
     }
-  }, [inView, eventUrl]);
-
-  const copyLink = () => {
-    navigator.clipboard.writeText(eventUrl);
-    toast.success("লিংক কপি হয়েছে!");
   };
-
-  const shareWhatsApp = () => {
-    window.open(
-      `https://wa.me/?text=${encodeURIComponent(
-        event.title + " - " + eventUrl
-      )}`
-    );
-  };
-
-  const daysLeft = Math.ceil(
-    (new Date(event.eventDate) - new Date()) / (1000 * 60 * 60 * 24)
-  );
 
   return (
+    <div onClick={handleClick} className="cursor-pointer">
+      {children}
+    </div>
+  );
+};
+
+const EventCard = React.memo(({ event, index }) => {
+  return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      whileHover={{ scale: 1.05, y: -10 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      whileHover={{ y: -10, scale: 1.03 }}
+      className="group relative bg-white dark:bg-gray-800 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 dark:border-gray-700"
     >
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+
       <div className="relative">
         <img
-          src={event.thumbnail1 || "https://i.imgur.com/6b4Xb.jpg"}
+          src={`${event.thumbnail}?v=${event._id}`}
           alt={event.title}
+          className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
           loading="lazy"
-          className="w-full h-56 object-cover"
+          key={event._id}
         />
-        <div className="absolute top-4 right-4 flex gap-2">
-          <button
-            onClick={copyLink}
-            className="p-2 bg-white/90 rounded-full shadow"
-            aria-label="Copy"
-          >
+        <div className="absolute top-4 right-4 z-20">
+          <span className="px-4 py-2 bg-white/95 dark:bg-black/90 backdrop-blur-md text-emerald-700 dark:text-emerald-400 rounded-full text-sm font-bold shadow-lg flex items-center gap-1 border border-emerald-200 dark:border-emerald-800">
+            <Sparkles className="w-4 h-4" />
+            {event.eventType}
+          </span>
+        </div>
+      </div>
+
+      <div className="p-6 space-y-4 relative z-20">
+        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+          {event.title}
+        </h3>
+
+        <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
+          {event.description}
+        </p>
+
+        <div className="space-y-3 text-sm">
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+            <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <span className="font-medium">{event.location}</span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+            <Calendar className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <span>
+              {format(new Date(event.eventDate), "dd MMMM, yyyy", {
+                locale: bn,
+              })}
+            </span>
+          </div>
+        </div>
+
+        <ProtectedEventLink eventId={event._id}>
+          <div className="block text-center bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-2xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+            বিস্তারিত দেখুন
             <svg
               className="w-5 h-5"
               fill="none"
@@ -78,306 +182,319 @@ const EventCard = React.memo(({ event, index }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                d="M9 5l7 7-7 7"
               />
             </svg>
-          </button>
-          <button
-            onClick={shareWhatsApp}
-            className="p-2 bg-white/90 rounded-full shadow"
-            aria-label="WhatsApp"
-          >
-            <svg className="w-5 h-5" fill="#25D366" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 5.44h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.261c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.125" />
-            </svg>
-          </button>
-        </div>
-        {daysLeft > 0 && daysLeft <= 3 && (
-          <span className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">
-            {daysLeft} দিন বাকি
-          </span>
-        )}
-      </div>
-
-      <div className="p-6 space-y-3">
-        <div className="flex justify-between">
-          <h3 className="text-xl font-bold text-green-700 dark:text-green-400 line-clamp-1">
-            {event.title}
-          </h3>
-          <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 rounded-full text-xs">
-            {event.eventType}
-          </span>
-        </div>
-
-        <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
-          {event.description}
-        </p>
-
-        <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-          <p className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {event.location}
-          </p>
-          <p className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h.01a1 1 0 100-2H6zm2 0a1 1 0 000 2h.01a1 1 0 100-2H8zm2 0a1 1 0 000 2h.01a1 1 0 100-2H10zm2 0a1 1 0 000 2h.01a1 1 0 100-2H12z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {format(new Date(event.eventDate), "dd MMMM, yyyy", { locale: bn })}
-          </p>
-          <p className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {event.participants?.length || 0} জন
-          </p>
-        </div>
-
-        <div className="flex gap-2">
-          <Link
-            to={`/event/${event._id}`}
-            className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl text-center font-bold text-sm hover:from-green-700 hover:to-emerald-700 transition"
-          >
-            বিস্তারিত
-          </Link>
-          <button
-            onClick={() =>
-              document.getElementById(`qr-${event._id}`).showModal()
-            }
-            className="px-4 py-3 bg-gray-100 dark:bg-gray-700 rounded-xl"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm5 0a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H9a1 1 0 01-1-1V4zm5 0a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V4zM3 11a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm5 0a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H9a1 1 0 01-1-1v-3zm5 0a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-3z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <dialog id={`qr-${event._id}`} className="modal">
-          <div className="modal-box p-8 **bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100**">
-            <h3 className="font-bold text-lg mb-4">QR কোড</h3>
-            {qrCode ? (
-              <img src={qrCode} alt="QR" className="mx-auto" />
-            ) : (
-              <div className="w-48 h-48 mx-auto bg-gray-200 animate-pulse rounded"></div>
-            )}
-            <p className="text-center mt-4 text-sm">স্ক্যান করে যোগ দিন</p>
-            <form method="dialog" className="modal-backdrop">
-              <button className="btn btn-primary mt-4">বন্ধ</button>
-            </form>
           </div>
-        </dialog>
+        </ProtectedEventLink>
       </div>
     </motion.div>
   );
 });
 
-// Skeleton
-const SkeletonCard = () => (
-  <div className="bg-white/80 dark:bg-gray-800/90 rounded-3xl shadow-xl animate-pulse">
-    <div className="h-56 bg-gray-300 dark:bg-gray-700"></div>
-    <div className="p-6 space-y-4">
-      <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-      <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-      <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
-      <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded"></div>
-    </div>
-  </div>
-);
-
 const UpcomingEvents = () => {
-  const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("darkMode") === "true"
+  );
+  const navigate = useNavigate();
 
-  // Debounce
+  // Dark Mode
   useEffect(() => {
-    const timer = setTimeout(() => {}, 300);
-    return () => clearTimeout(timer);
-  }, [searchTerm, selectedType]);
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
 
-  // Fetch (লজিক একই)
+  const debouncedSearch = useMemo(() => {
+    let timeout;
+    return (value) => {
+      clearTimeout(timeout);
+
+      setCurrentPage(1);
+      timeout = setTimeout(() => setSearchTerm(value), 400);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true);
       try {
-        const query = new URLSearchParams({
-          search: searchTerm,
-          type: selectedType,
-        }).toString();
+        const query = new URLSearchParams();
+        if (searchTerm) query.append("search", searchTerm);
+        if (selectedType) query.append("type", selectedType);
+
         const res = await fetch(`/api/events/upcoming?${query}`);
         const data = await res.json();
 
         if (res.ok) {
-          setEvents(data);
-          setFilteredEvents(data);
+          setAllEvents(data);
+          setCurrentPage(1);
         } else {
-          toast.error("ইভেন্ট লোড হয়নি");
+          toast.error("ইভেন্ট লোড করতে সমস্যা হয়েছে");
         }
       } catch (err) {
-        toast.error("সার্ভার সমস্যা");
+        toast.error("সার্ভারের সাথে সংযোগ নেই");
       } finally {
         setLoading(false);
+        setInitialLoad(false);
       }
     };
+
     fetchEvents();
   }, [searchTerm, selectedType]);
 
-  // Client Filter (একই)
-  useEffect(() => {
-    let filtered = events;
-    if (searchTerm)
-      filtered = filtered.filter((e) =>
-        e.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    if (selectedType)
-      filtered = filtered.filter((e) => e.eventType === selectedType);
-    setFilteredEvents(filtered);
-  }, [events, searchTerm, selectedType]);
+  const handleTypeChange = (e) => {
+    setSelectedType(e.target.value);
+    setCurrentPage(1);
+  };
 
-  // Dark Mode
-  useEffect(() => {
-    // এখানে window.matchMedia ব্যবহার করে সিস্টেম প্রিফারেন্সও চেক করা যেতে পারে
-    if (darkMode) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-  }, [darkMode]);
+  const totalPages = Math.ceil(allEvents.length / EVENTS_PER_PAGE);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 dark:to-teal-900 flex items-center justify-center">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl px-4">
-          {[...Array(6)].map((_, i) => (
-            <SkeletonCard key={i} />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const paginatedEvents = useMemo(() => {
+    const startIndex = (currentPage - 1) * EVENTS_PER_PAGE;
+    const endIndex = startIndex + EVENTS_PER_PAGE;
+    return allEvents.slice(startIndex, endIndex);
+  }, [allEvents, currentPage]);
+
+  const goToPage = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  };
 
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-teal-900 py-16 px-4 transition-colors`}
-    >
-      <Toaster position="top-right" />
-      <div className="max-w-7xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-6xl font-bold text-center text-green-700 dark:text-green-400 mb-12"
-        >
-          আসন্ন সামাজিক ইভেন্ট
-        </motion.h1>
+    <>
+      <AnimatePresence>{initialLoad && <FullPageLoader />}</AnimatePresence>
 
-        {/* Controls */}
-        <div className="mb-12 space-y-6">
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-            {/* ১. সার্চ ইনপুট (পরিবর্তন করা হলো) */}
-            <input
-              type="text"
-              placeholder="খুঁজুন..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-96 px-6 py-4 text-lg border-2 rounded-2xl focus:border-green-500 outline-none transition-all **text-gray-900 bg-white dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400**"
-            />
-            {/* ২. সিলেক্ট ফিল্ড (পরিবর্তন করা হলো) */}
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full md:w-64 px-6 py-4 text-lg border-2 rounded-2xl focus:border-green-500 outline-none **text-gray-900 bg-white dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600**"
-            >
-              {eventTypes.map((t) => (
-                <option
-                  key={t.value}
-                  value={t.value}
-                  className="**dark:bg-gray-700**"
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-teal-900 py-16 px-4 transition-all duration-500">
+        <Toaster position="top-right" />
+
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-16"
+          >
+            <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
+              আসন্ন সামাজিক ইভেন্টসমূহ
+            </h1>
+            <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+              একসাথে মিলে সমাজের জন্য কিছু করি। আজই যোগ দিন!
+            </p>
+          </motion.div>
+
+          {/* Search Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12"
+          >
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="relative flex-1">
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 w-6 h-6" />
+                  <input
+                    type="text"
+                    placeholder="ইভেন্টের নাম খুঁজুন..."
+                    onChange={(e) => debouncedSearch(e.target.value)}
+                    className="w-full pl-14 pr-12 py-5 text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400 outline-none transition-all bg-transparent text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => debouncedSearch("")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-red-500 transition"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Filter className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 w-6 h-6" />
+                  <select
+                    value={selectedType}
+                    onChange={handleTypeChange}
+                    className="pl-14 pr-10 py-5 text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-400 outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 appearance-none cursor-pointer"
+                  >
+                    {eventTypes.map((t) => (
+                      <option
+                        key={t.value}
+                        value={t.value}
+                        className="bg-white dark:bg-gray-800"
+                      >
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="p-5 bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-purple-600 dark:to-pink-600 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:scale-110"
                 >
-                  {t.label}
-                </option>
+                  {darkMode ? (
+                    <Sun className="w-7 h-7 text-yellow-200" />
+                  ) : (
+                    <Moon className="w-7 h-7 text-gray-800" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Content */}
+          {loading && !initialLoad ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...Array(EVENTS_PER_PAGE)].map((_, i) => (
+                <ShimmerLoader key={i} />
               ))}
-            </select>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-3 bg-gray-200 dark:bg-gray-700 **text-gray-800 dark:text-gray-200** rounded-xl"
-            >
-              {darkMode ? "Light" : "Dark"}
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-2 justify-center">
-            {eventTypes.slice(1).map((type) => (
-              <button
-                key={type.value}
-                onClick={() =>
-                  setSelectedType(selectedType === type.value ? "" : type.value)
-                }
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  selectedType === type.value
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-200 dark:bg-gray-700 hover:bg-green-100 **text-gray-800 dark:text-gray-200**"
-                }`}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Events */}
-        <AnimatePresence>
-          {filteredEvents.length === 0 ? (
+            </div>
+          ) : allEvents.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-24"
+              className="text-center py-32"
             >
-              <p className="text-3xl font-bold text-gray-600 dark:text-gray-400">
-                কোনো ইভেন্ট নেই
+              <div className="bg-gray-200 dark:bg-gray-700 border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                <Search className="w-20 h-20 text-gray-400 dark:text-gray-500" />
+              </div>
+              <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                কোনো ইভেন্ট পাওয়া যায়নি
+              </p>
+              <p className="text-gray-600 dark:text-gray-400 mt-4">
+                নতুন ইভেন্ট তৈরি করুন বা ফিল্টার পরিবর্তন করুন
               </p>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredEvents.map((event, i) => (
-                <EventCard key={event._id} event={event} index={i} />
-              ))}
-            </div>
+            <>
+              <motion.div
+                key={currentPage} // Key change for page transition animation
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              >
+                <AnimatePresence mode="wait">
+                  {paginatedEvents.map((event, i) => (
+                    <EventCard key={event._id} event={event} index={i} />
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+
+              {/* --- Pagination Controls --- */}
+              {totalPages > 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex justify-center items-center space-x-2 mt-16"
+                >
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`p-3 rounded-full transition-all duration-300 ${
+                      currentPage === 1
+                        ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                        : "bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-md hover:bg-green-100 dark:hover:bg-gray-700 hover:shadow-lg"
+                    }`}
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+
+                  {/* Page Numbers */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentPage} // Key for animation
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex space-x-2"
+                    >
+                      {renderPageNumbers().map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page)}
+                          className={`px-4 py-2 rounded-xl text-lg font-bold transition-all duration-300 shadow-md ${
+                            page === currentPage
+                              ? "bg-green-600 text-white dark:bg-green-500 dark:text-gray-900 shadow-green-400/50 dark:shadow-green-700/50 transform scale-105"
+                              : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-gray-700"
+                          }`}
+                        >
+                          {page.toLocaleString("bn-BD")}
+                        </button>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`p-3 rounded-full transition-all duration-300 ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                        : "bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-md hover:bg-green-100 dark:hover:bg-gray-700 hover:shadow-lg"
+                    }`}
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                </motion.div>
+              )}
+            </>
           )}
-        </AnimatePresence>
+        </div>
       </div>
 
-      {/* Back to Top */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="fixed bottom-8 right-8 p-4 bg-green-600 text-white rounded-full shadow-2xl z-50"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 10l7-7m0 0l7 7m-7-7v18"
-          />
-        </svg>
-      </button>
-    </div>
+      {/* Shimmer Animation */}
+      <style jsx>{`
+        @keyframes shimmer {
+          0% {
+            background-position: -468px 0;
+          }
+          100% {
+            background-position: 468px 0;
+          }
+        }
+        .animate-shimmer {
+          background: linear-gradient(
+            to right,
+            transparent 0%,
+            #e0e0e0 50%,
+            transparent 100%
+          );
+          background-size: 200% 100%;
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
+    </>
   );
 };
 

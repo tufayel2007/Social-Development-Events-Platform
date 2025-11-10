@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
 import { useQuery } from "@tanstack/react-query"; // ডেটা ফেচ করার জন্য
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const UpdateEvent = () => {
   const { id } = useParams(); // URL থেকে Event ID ধরবে

@@ -154,7 +154,7 @@ const Register = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Full Name */}
+          {/* Full Name - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="text"
@@ -167,17 +167,22 @@ const Register = () => {
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
                 ${
                   focused === "fullName"
-                    ? "border-emerald-500 ring-4 ring-emerald-100"
-                    : "border-gray-200"
+                    ? "border-emerald-500 ring-4 ring-emerald-800"
+                    : "border-gray-200 dark:border-gray-600"
                 }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                bg-gradient-to-r from-white to-emerald-50/30`}
+                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+                bg-gradient-to-r from-white to-emerald-50/30 
+                dark:from-gray-900 dark:to-gray-800
+                placeholder-gray-500 dark:placeholder-gray-400
+                text-gray-900 dark:text-white 
+                font-semibold 
+                placeholder:font-medium`}
               required
             />
             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Photo URL */}
+          {/* Photo URL - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="url"
@@ -190,16 +195,21 @@ const Register = () => {
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
                 ${
                   focused === "photoURL"
-                    ? "border-emerald-500 ring-4 ring-emerald-100"
-                    : "border-gray-200"
+                    ? "border-emerald-500 ring-4 ring-emerald-800"
+                    : "border-gray-200 dark:border-gray-600"
                 }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                bg-gradient-to-r from-white to-emerald-50/30`}
+                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+                bg-gradient-to-r from-white to-emerald-50/30 
+                dark:from-gray-900 dark:to-gray-800
+                placeholder-gray-500 dark:placeholder-gray-400
+                text-gray-900 dark:text-white 
+                font-semibold 
+                placeholder:font-medium`}
             />
             <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Email */}
+          {/* Email - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="email"
@@ -212,17 +222,22 @@ const Register = () => {
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
                 ${
                   focused === "email"
-                    ? "border-emerald-500 ring-4 ring-emerald-100"
-                    : "border-gray-200"
+                    ? "border-emerald-500 ring-4 ring-emerald-800"
+                    : "border-gray-200 dark:border-gray-600"
                 }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                bg-gradient-to-r from-white to-emerald-50/30`}
+                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+                bg-gradient-to-r from-white to-emerald-50/30 
+                dark:from-gray-900 dark:to-gray-800
+                placeholder-gray-500 dark:placeholder-gray-400
+                text-gray-900 dark:text-white 
+                font-semibold 
+                placeholder:font-medium`}
               required
             />
             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Password */}
+          {/* Password - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -235,18 +250,23 @@ const Register = () => {
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12 pr-14
                 ${
                   focused === "password"
-                    ? "border-emerald-500 ring-4 ring-emerald-100"
-                    : "border-gray-200"
+                    ? "border-emerald-500 ring-4 ring-emerald-800"
+                    : "border-gray-200 dark:border-gray-600"
                 }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                bg-gradient-to-r from-white to-emerald-50/30`}
+                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+                bg-gradient-to-r from-white to-emerald-50/30 
+                dark:from-gray-900 dark:to-gray-800
+                placeholder-gray-500 dark:placeholder-gray-400
+                text-gray-900 dark:text-white 
+                font-semibold 
+                placeholder:font-medium`}
               required
             />
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800 transition"
             >
               {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
             </button>
@@ -269,7 +289,7 @@ const Register = () => {
             </ul>
           )}
 
-          {/* Confirm Password */}
+          {/* Confirm Password - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -282,18 +302,23 @@ const Register = () => {
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12 pr-14
                 ${
                   focused === "confirmPassword"
-                    ? "border-emerald-500 ring-4 ring-emerald-100"
-                    : "border-gray-200"
+                    ? "border-emerald-500 ring-4 ring-emerald-800"
+                    : "border-gray-200 dark:border-gray-600"
                 }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                bg-gradient-to-r from-white to-emerald-50/30`}
+                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+                bg-gradient-to-r from-white to-emerald-50/30 
+                dark:from-gray-900 dark:to-gray-800
+                placeholder-gray-500 dark:placeholder-gray-400
+                text-gray-900 dark:text-white 
+                font-semibold 
+                placeholder:font-medium`}
               required
             />
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800 transition"
             >
               {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
             </button>
@@ -355,7 +380,7 @@ const Register = () => {
           <button
             onClick={handleGoogleRegister}
             disabled={loading}
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition606-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
+            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
             title="Continue with Google"
           >
             <FcGoogle size={24} className="group-hover:animate-pulse" />
@@ -365,7 +390,7 @@ const Register = () => {
           <button
             onClick={handleGoogleRegister}
             disabled
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition606-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
+            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
             title="Continue with Google"
           >
             <FaSquareGithub size={24} className="group-hover:animate-pulse" />
@@ -375,7 +400,7 @@ const Register = () => {
           <button
             disabled
             onClick={handleGoogleRegister}
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition606-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
+            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
             title="Continue with Google"
           >
             <FaApple size={24} className="group-hover:animate-pulse" />

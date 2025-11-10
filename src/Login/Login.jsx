@@ -53,17 +53,20 @@ const Login = () => {
       const user = userCredential.user;
 
       // 2. 💡 নতুন সংযোজন: MongoDB-তে ইউজার ডেটা সেভ করা বা আপডেট করা
-      await fetch("http://localhost:3000/api/LOGIN_USER/save-user", {
-        // সার্ভার URL পরিবর্তন করুন
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          fullName: user.displayName || "N/A", // যদি নাম না থাকে
-          photoURL: user.photoURL || "N/A", // যদি ছবি না থাকে
-        }),
-      });
+      await fetch(
+        "https://social-development-events-platform-brown.vercel.app/api/LOGIN_USER/save-user",
+        {
+          // সার্ভার URL পরিবর্তন করুন
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            fullName: user.displayName || "N/A", // যদি নাম না থাকে
+            photoURL: user.photoURL || "N/A", // যদি ছবি না থাকে
+          }),
+        }
+      );
 
       toast.success("Welcome back!", {
         icon: <Sparkles className="text-yellow-400" />,
@@ -98,17 +101,20 @@ const Login = () => {
       const user = result.user;
 
       // 2. 💡 নতুন সংযোজন: MongoDB-তে ইউজার ডেটা সেভ করা বা আপডেট করা
-      await fetch("http://localhost:3000/api/LOGIN_USER/save-user", {
-        // সার্ভার URL পরিবর্তন করুন
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          fullName: user.displayName || "N/A",
-          photoURL: user.photoURL || "N/A",
-        }),
-      });
+      await fetch(
+        "https://social-development-events-platform-brown.vercel.app/api/LOGIN_USER/save-user",
+        {
+          // সার্ভার URL পরিবর্তন করুন
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            fullName: user.displayName || "N/A",
+            photoURL: user.photoURL || "N/A",
+          }),
+        }
+      );
 
       toast.success("Welcome with Google!", {
         icon: <FcGoogle size={20} />,
@@ -168,13 +174,15 @@ const Login = () => {
               onFocus={() => setFocused("email")}
               onBlur={() => setFocused("")}
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium
-                ${
-                  focused === "email"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30`}
+      ${
+        focused === "email"
+          ? "border-emerald-500 ring-4 ring-emerald-800"
+          : "border-gray-200 dark:border-gray-600"
+      }
+      focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+      bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-gray-800
+      placeholder-gray-500 dark:placeholder-gray-400
+      text-gray-800 dark:text-gray-100`}
               required
             />
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"></div>
@@ -190,13 +198,15 @@ const Login = () => {
               onFocus={() => setFocused("password")}
               onBlur={() => setFocused("")}
               className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pr-14
-                ${
-                  focused === "password"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-800"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30`}
+      ${
+        focused === "password"
+          ? "border-emerald-500 ring-4 ring-emerald-800"
+          : "border-gray-300 dark:border-gray-600"
+      }
+      focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
+      bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-gray-800
+      placeholder-gray-500 dark:placeholder-gray-400
+      text-gray-800 dark:text-gray-100`} // ✅ টেক্সট কনট্রাস্ট ঠিক করা হয়েছে
               required
             />
             <button
