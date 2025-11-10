@@ -63,7 +63,7 @@ const Home = () => {
     },
     {
       icon: "Blood",
-      title: "রক্তদান",
+      title: "hihhkhjojhiouh",
       desc: "জীবন বাঁচান, রক্ত দিন",
       color: "red",
     },
