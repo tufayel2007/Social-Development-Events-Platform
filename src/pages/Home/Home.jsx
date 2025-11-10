@@ -20,26 +20,42 @@ import avatar2 from "../../assets/Fatema.png";
 import avatar3 from "../../assets/Kamrool.png";
 
 const Home = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [email, setEmail] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [timeLeft, setTimeLeft] = useState({});
 
   const { scrollYProgress } = useScroll();
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
-
   const [statsRef, statsInView] = useInView({
     threshold: 0.3,
     triggerOnce: true,
   });
+
+  // Countdown for next event: 29 November 2025
+  useEffect(() => {
+    const eventDate = new Date("2025-11-29T10:00:00");
+    const timer = setInterval(() => {
+      const now = new Date();
+      const diff = eventDate - now;
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setTimeLeft({ days, hours, minutes, seconds });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const stats = [
     { end: 5000, label: "সদস্য", suffix: "+" },
@@ -134,7 +150,7 @@ const Home = () => {
       color: "zinc",
     },
     {
-      icon: " Public Toilet",
+      icon: "Public Toilet",
       title: "পাবলিক টয়লেট",
       desc: "স্বাস্থ্যবিধি উন্নয়ন",
       color: "stone",
@@ -173,7 +189,6 @@ const Home = () => {
     },
   ];
 
-  // FAQ
   const faqs = [
     {
       q: "কিভাবে ইভেন্ট তৈরি করব?",
@@ -183,44 +198,20 @@ const Home = () => {
     { q: "এটা কি ফ্রি?", a: "হ্যাঁ, সম্পূর্ণ ফ্রি।" },
   ];
 
-  return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        darkMode
-          ? "dark bg-gray-900"
-          : "bg-gradient-to-b from-green-50 to-white"
-      }`}
-    >
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 2 }}
-        className="fixed bottom-6 right-6 z-50"
-      >
-        <Link
-          to="/upcomingEvents"
-          className="bg-emerald-600 text-white p-4 rounded-full shadow-2xl hover:bg-emerald-700 transform hover:scale-110 transition-all flex items-center gap-2"
-        >
-          <span className="text-2xl">Join</span>
-          <span className="font-bold">জয়েন করুন</span>
-        </Link>
-      </motion.div>
+  // Smooth Scroll
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-emerald-600 z-50 origin-left"
         style={{ scaleX: scrollYProgress }}
       />
 
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="fixed top-1/2 right-6 -translate-y-1/2 z-50 
-             p-4 bg-white dark:bg-gray-800 rounded-full shadow-lg 
-             hover:scale-110 hover:rotate-12 transition-all duration-300 ease-in-out 
-             text-xl font-bold"
-      >
-        {darkMode ? "☀️" : "🌙"}
-      </button>
-
+      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div
           style={{ scale: scaleProgress, opacity: opacityProgress }}
@@ -241,7 +232,7 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            একসাথে <span className="text-emerald-400"> গড়ি সুন্দর সমাজ</span>
+            <span className="text-black"> একসাথে গড়ি সুন্দর সমাজ</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -272,26 +263,36 @@ const Home = () => {
           </motion.div>
         </div>
 
-        {/* Live Ticker */}
-        <div className="absolute bottom-0 w-full bg-black/50 backdrop-blur-sm py-3 overflow-hidden">
-          <div className="animate-marquee whitespace-nowrap text-emerald-300 font-medium">
-            <span className="mx-4">
-              Green ১৫ মিনিট আগে: ধানমন্ডিতে পরিচ্ছন্নতা অভিযান শুরু
-            </span>
-            <span className="mx-4">
-              Green ২ ঘণ্টা আগে: ৫০+ গাছ লাগানো হয়েছে
-            </span>
-            <span className="mx-4">
-              Green নতুন ইভেন্ট: রক্তদান ক্যাম্প, ২৯ নভেম্বর
-            </span>
+        {/* Live Ticker + Countdown */}
+        <div className="absolute bottom-0 w-full bg-black/70 backdrop-blur-sm py-4 overflow-hidden">
+          <div className="flex justify-between items-center px-6 text-emerald-300 font-medium">
+            <div
+              className="animate-marquee whitespace-nowrap flex-1"
+              style={{ animation: "marquee 25s linear infinite" }}
+            >
+              <span className="mx-6">
+                Green ১৫ মিনিট আগে: ধানমন্ডিতে পরিচ্ছন্নতা অভিযান শুরু
+              </span>
+              <span className="mx-6">
+                Green ২ ঘণ্টা আগে: ৫০+ গাছ লাগানো হয়েছে
+              </span>
+              <span className="mx-6">
+                Green নতুন ইভেন্ট: রক্তদান ক্যাম্প, ২৯ নভেম্বর
+              </span>
+            </div>
+            <div className="ml-8 text-right text-white">
+              <p className="text-xs">আগামী রক্তদান ক্যাম্প</p>
+              <p className="text-lg font-bold">
+                {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m :{" "}
+                {timeLeft.seconds}s
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section
-        ref={statsRef}
-        className="py-20 px-6 bg-emerald-50 dark:bg-gray-800"
-      >
+      {/* Stats */}
+      <section ref={statsRef} className="py-20 px-6 bg-emerald-50">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((stat, i) => (
             <motion.div
@@ -299,7 +300,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.1 }}
-              className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg"
+              className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg"
             >
               <div className="text-4xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400">
                 {statsInView && (
@@ -314,6 +315,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Features */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.h2
@@ -321,9 +323,10 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             className="text-4xl md:text-5xl font-bold text-center text-gray-800 dark:text-white mb-16"
           >
-            আমাদের <span className="text-emerald-600">সেবাসমূহ</span>
+            <span className="text-emerald-600 dark:text-emerald-400">
+              আমাদের সেবাসমূহ
+            </span>
           </motion.h2>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((f, i) => (
               <motion.div
@@ -340,7 +343,7 @@ const Home = () => {
                   {f.icon}
                 </div>
                 <h3
-                  className={`text-xl font-bold text-${f.color}-600 dark:text-${f.color}-400 mb-2`}
+                  className={`text-xl font-bold mb-2 text-${f.color}-600 dark:text-white`}
                 >
                   {f.title}
                 </h3>
@@ -353,6 +356,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Gallery */}
       <section className="py-20 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h2
@@ -360,9 +364,11 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             className="text-4xl md:text-5xl font-bold text-center text-gray-800 dark:text-white mb-16"
           >
-            আমাদের <span className="text-emerald-600">স্মৃতিচারণ</span>
+            আমাদের{" "}
+            <span className="text-emerald-600 dark:text-emerald-400">
+              স্মৃতিচারণ
+            </span>
           </motion.h2>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {gallery.map((img, i) => (
               <motion.div
@@ -375,7 +381,6 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
-
           {selectedImage && (
             <div
               className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
@@ -394,6 +399,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Testimonials */}
       <section className="py-20 px-6 bg-emerald-600">
         <div className="max-w-5xl mx-auto">
           <motion.h2
@@ -403,7 +409,6 @@ const Home = () => {
           >
             তারা কী বলছে
           </motion.h2>
-
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((t, i) => (
               <motion.div
@@ -431,6 +436,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* FAQ */}
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <motion.h2
@@ -440,7 +446,6 @@ const Home = () => {
           >
             প্রশ্নোত্তর
           </motion.h2>
-
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
@@ -460,6 +465,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Newsletter */}
       <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 to-teal-600">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
@@ -472,7 +478,6 @@ const Home = () => {
           <p className="text-xl text-emerald-100 mb-10">
             প্রতি সপ্তাহে আসন্ন ইভেন্টের আপডেট সরাসরি আপনার ইনবক্সে
           </p>
-
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -502,6 +507,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* CSS Animations */}
       <style jsx>{`
         @keyframes marquee {
           0% {
@@ -511,9 +517,8 @@ const Home = () => {
             transform: translateX(-100%);
           }
         }
-        .animate-marquee {
-          display: inline-block;
-          animation: marquee 20s linear infinite;
+        .animate-marquee:hover {
+          animation-play-state: paused;
         }
       `}</style>
     </div>

@@ -27,7 +27,7 @@ const eventTypes = [
   { value: "Plantation", label: "গাছ লাগানো" },
   { value: "Donation", label: "দান সংগ্রহ" },
 ];
-
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 const EVENTS_PER_PAGE = 6;
 
 const FullPageLoader = () => (
@@ -230,7 +230,7 @@ const UpcomingEvents = () => {
         if (searchTerm) query.append("search", searchTerm);
         if (selectedType) query.append("type", selectedType);
 
-        const res = await fetch(`/api/events/upcoming?${query}`);
+        const res = await fetch(`${API_URL}/api/events/upcoming?${query}`);
         const data = await res.json();
 
         if (res.ok) {

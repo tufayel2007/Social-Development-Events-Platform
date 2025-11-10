@@ -10,7 +10,7 @@ import QRCode from "qrcode";
 import { auth, onAuthStateChanged } from "../firebase/FirebaseConfig";
 import { Loader2, LogIn } from "lucide-react";
 import { MessageCircle, QrCode, Copy } from "lucide-react";
-
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const EventDetails = () => {
     const fetchEvent = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/events/${id}`);
+        const res = await fetch(`${API_URL}/api/events/${id}`);
         const data = await res.json();
 
         if (res.ok) {
