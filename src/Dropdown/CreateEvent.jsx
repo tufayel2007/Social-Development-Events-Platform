@@ -133,7 +133,9 @@ const CreateEvent = () => {
           <h1 className="text-5xl font-bold text-green-700 mb-4 dark:text-green-400">
             নতুন ইভেন্ট তৈরি করুন
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">সমাজের ন</p>
+          <p className="text-xl text-gray-600 dark:text-gray-400">
+            সমাজের জন্য একটি নতুন উদ্যোগ শুরু করুন
+          </p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-2xl p-10 dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700">
