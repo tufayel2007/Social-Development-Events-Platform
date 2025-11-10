@@ -13,7 +13,7 @@ import useMeasure from "react-use-measure";
 import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
 import EventCard from "../components/EventCard";
-
+const API_URL = "https://social-development-events-platform-brown.vercel.app";
 const SearchIcon = () => (
   <svg
     className="w-5 h-5"
@@ -107,7 +107,9 @@ const JoinedEvents = () => {
         isRefresh && setRefreshing(true);
 
         const userEmail = user.email;
-        const res = await fetch(`/api/events/joined?email=${userEmail}`);
+        const res = await fetch(
+          `${API_URL}/api/events/joined?email=${userEmail}`
+        );
         const data = await res.json();
 
         if (res.ok) {

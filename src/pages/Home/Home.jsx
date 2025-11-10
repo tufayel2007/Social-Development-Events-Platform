@@ -1,10 +1,35 @@
 /* eslint-disable no-unused-vars */
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import {
+  Mail,
+  Loader2,
+  CheckCircle,
+  XCircle,
+  ChevronDown,
+  TreePine,
+  Droplets,
+  Heart,
+  BookOpen,
+  Stethoscope,
+  Shirt,
+  Utensils,
+  Backpack,
+  Hammer,
+  Users,
+  Globe,
+  Recycle,
+  Trash2,
+  Building2,
+} from "lucide-react";
 
 import bannerImg from "../../assets/bannerImg.png";
 import gallery1 from "../../assets/Trre01.png";
@@ -21,8 +46,18 @@ import avatar3 from "../../assets/Kamrool.png";
 
 const Home = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [status, setStatus] = useState("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
   const [selectedImage, setSelectedImage] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({});
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   const { scrollYProgress } = useScroll();
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
@@ -33,12 +68,11 @@ const Home = () => {
     triggerOnce: true,
   });
 
-  // Countdown for next event: 29 November 2025
   useEffect(() => {
     const eventDate = new Date("2025-11-29T10:00:00");
     const timer = setInterval(() => {
       const now = new Date();
-      const diff = eventDate - now;
+      const diff = eventDate.getTime() - now.getTime();
 
       if (diff <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -57,6 +91,32 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setErrorMsg("দয়া করে সঠিক ইমেইল দিন");
+      setStatus("error");
+      return;
+    }
+
+    setIsLoading(true);
+    setStatus("idle");
+    setErrorMsg("");
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setStatus("success");
+      alert("সাবস্ক্রাইব সফল! Success");
+      setEmail("");
+      setTimeout(() => setStatus("idle"), 5000);
+    }, 2000);
+  };
+
   const stats = [
     { end: 5000, label: "সদস্য", suffix: "+" },
     { end: 250, label: "ইভেন্ট", suffix: "+" },
@@ -66,91 +126,91 @@ const Home = () => {
 
   const features = [
     {
-      icon: "Environment",
+      icon: <Globe className="w-8 h-8" />,
       title: "পরিবেশ পরিচ্ছন্নতা",
       desc: "আপনার এলাকা পরিষ্কার রাখুন",
       color: "emerald",
     },
     {
-      icon: "Tree",
+      icon: <TreePine className="w-8 h-8" />,
       title: "বৃক্ষরোপণ",
       desc: "প্রতি সপ্তাহে নতুন গাছ",
       color: "lime",
     },
     {
-      icon: "Blood",
+      icon: <Heart className="w-8 h-8" />,
       title: "রক্তদান",
       desc: "জীবন বাঁচান, রক্ত দিন",
       color: "red",
     },
     {
-      icon: "Book",
+      icon: <BookOpen className="w-8 h-8" />,
       title: "শিক্ষা সহায়তা",
       desc: "গরিব শিশুদের পড়ান",
       color: "blue",
     },
     {
-      icon: "Water",
+      icon: <Droplets className="w-8 h-8" />,
       title: "পানি সরবরাহ",
       desc: "গ্রামে বিশুদ্ধ পানি",
       color: "cyan",
     },
     {
-      icon: "Hospital",
+      icon: <Stethoscope className="w-8 h-8" />,
       title: "স্বাস্থ্য ক্যাম্প",
       desc: "ফ্রি চেকআপ ও ওষুধ",
       color: "pink",
     },
     {
-      icon: "Clothes",
+      icon: <Shirt className="w-8 h-8" />,
       title: "কাপড় বিতরণ",
       desc: "শীতের কাপড় দান",
       color: "purple",
     },
     {
-      icon: "Food",
+      icon: <Utensils className="w-8 h-8" />,
       title: "খাদ্য সহায়তা",
       desc: "ক্ষুধার্তদের খাওয়ান",
       color: "orange",
     },
     {
-      icon: "Bag",
+      icon: <Backpack className="w-8 h-8" />,
       title: "স্কুল সামগ্রী",
       desc: "বই-খাতা বিতরণ",
       color: "indigo",
     },
     {
-      icon: "Tools",
+      icon: <Hammer className="w-8 h-8" />,
       title: "ইনফ্রাস্ট্রাকচার",
       desc: "রাস্তা, পুল মেরামত",
       color: "yellow",
     },
     {
-      icon: "Handshake",
+      icon: <Users className="w-8 h-8" />,
       title: "সম্প্রদায় গঠন",
       desc: "মিলনমেলা আয়োজন",
       color: "teal",
     },
     {
-      icon: "Globe",
+      icon: <Globe className="w-8 h-8" />,
       title: "জলবায়ু সচেতনতা",
       desc: "পরিবেশ শিক্ষা",
       color: "green",
     },
     {
-      icon: "Recycle",
+      icon: <Recycle className="w-8 h-8" />,
       title: "রিসাইক্লিং",
       desc: "বর্জ্য পুনর্ব্যবহার",
       color: "gray",
     },
     {
-      icon: "Broom",
+      icon: <Trash2 className="w-8 h-8" />,
       title: "ডাস্টবিন স্থাপন",
       desc: "পরিচ্ছন্নতা উন্নয়ন",
       color: "zinc",
     },
     {
-      icon: "Public Toilet",
+      icon: <Building2 className="w-8 h-8" />,
       title: "পাবলিক টয়লেট",
       desc: "স্বাস্থ্যবিধি উন্নয়ন",
       color: "stone",
@@ -198,20 +258,17 @@ const Home = () => {
     { q: "এটা কি ফ্রি?", a: "হ্যাঁ, সম্পূর্ণ ফ্রি।" },
   ];
 
-  // Smooth Scroll
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      {/* Progress Bar */}
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-emerald-600 z-50 origin-left"
         style={{ scaleX: scrollYProgress }}
       />
 
-      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div
           style={{ scale: scaleProgress, opacity: opacityProgress }}
@@ -222,7 +279,7 @@ const Home = () => {
             alt="Hero"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         </motion.div>
 
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
@@ -230,15 +287,15 @@ const Home = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
+            className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
           >
-            <span className="text-black"> একসাথে গড়ি সুন্দর সমাজ</span>
+            একসাথে গড়ি <span className="text-emerald-400">সুন্দর সমাজ</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xl md:text-2xl text-black mb-8"
+            className="text-xl md:text-2xl text-emerald-100 mb-8 max-w-2xl mx-auto"
           >
             স্থানীয় পরিবেশ, শিক্ষা, স্বাস্থ্য — সবই এক ক্লিকে!
           </motion.p>
@@ -250,26 +307,22 @@ const Home = () => {
           >
             <Link
               to="/CreateEvent"
-              className="px-10 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full shadow-xl transform hover:scale-105 transition-all"
+              className="px-10 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
-              আজই শুরু করুন
+              আজই শুরু করুন <ChevronDown className="w-5 h-5 animate-bounce" />
             </Link>
             <Link
               to="/upcomingEvents"
-              className="px-10 py-4 bg-white/20 backdrop-blur-sm text-white font-bold text-lg rounded-full border-2 border-white hover:bg-white hover:text-emerald-600 transition-all"
+              className="px-10 py-4 bg-white/20 backdrop-blur-md text-white font-bold text-lg rounded-full border-2 border-white hover:bg-white hover:text-emerald-600 transition-all"
             >
               আরও জানুন
             </Link>
           </motion.div>
         </div>
 
-        {/* Live Ticker + Countdown */}
-        <div className="absolute bottom-0 w-full bg-black/70 backdrop-blur-sm py-4 overflow-hidden">
-          <div className="flex justify-between items-center px-6 text-emerald-300 font-medium">
-            <div
-              className="animate-marquee whitespace-nowrap flex-1"
-              style={{ animation: "marquee 25s linear infinite" }}
-            >
+        <div className="absolute bottom-0 w-full bg-black/80 backdrop-blur-md py-4">
+          <div className="flex flex-col md:flex-row justify-between items-center px-6 text-emerald-300">
+            <div className="animate-marquee whitespace-nowrap w-full md:w-auto">
               <span className="mx-6">
                 Green ১৫ মিনিট আগে: ধানমন্ডিতে পরিচ্ছন্নতা অভিযান শুরু
               </span>
@@ -280,8 +333,8 @@ const Home = () => {
                 Green নতুন ইভেন্ট: রক্তদান ক্যাম্প, ২৯ নভেম্বর
               </span>
             </div>
-            <div className="ml-8 text-right text-white">
-              <p className="text-xs">আগামী রক্তদান ক্যাম্প</p>
+            <div className="mt-2 md:mt-0 text-center md:text-right text-white">
+              <p className="text-xs opacity-80">আগামী রক্তদান ক্যাম্প</p>
               <p className="text-lg font-bold">
                 {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m :{" "}
                 {timeLeft.seconds}s
@@ -291,8 +344,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats */}
-      <section ref={statsRef} className="py-20 px-6 bg-emerald-50">
+      <section
+        ref={statsRef}
+        className="py-20 px-6 bg-emerald-50 dark:bg-gray-800"
+      >
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((stat, i) => (
             <motion.div
@@ -300,7 +355,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={statsInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.1 }}
-              className="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg"
+              className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-emerald-100 dark:border-gray-700"
             >
               <div className="text-4xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400">
                 {statsInView && (
@@ -315,8 +370,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 px-6">
+      <section id="features" className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -338,7 +392,7 @@ const Home = () => {
                 className="group bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border border-gray-100 dark:border-gray-700"
               >
                 <div
-                  className={`text-4xl mb-4 group-hover:scale-110 transition-transform`}
+                  className={`text-${f.color}-600 dark:text-${f.color}-400 mb-4 group-hover:scale-110 transition-transform`}
                 >
                   {f.icon}
                 </div>
@@ -377,30 +431,41 @@ const Home = () => {
                 onClick={() => setSelectedImage(img)}
                 className="overflow-hidden rounded-xl shadow-md cursor-zoom-in"
               >
-                <img src={img} alt="" className="w-full h-48 object-cover" />
+                <img
+                  src={img}
+                  alt=""
+                  className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                />
               </motion.div>
             ))}
           </div>
-          {selectedImage && (
-            <div
-              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-              onClick={() => setSelectedImage(null)}
-            >
-              <img
-                src={selectedImage}
-                alt=""
-                className="max-w-full max-h-full rounded-xl"
-              />
-              <button className="absolute top-6 right-6 text-white text-4xl">
-                ×
-              </button>
-            </div>
-          )}
+          <AnimatePresence>
+            {selectedImage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+                onClick={() => setSelectedImage(null)}
+              >
+                <motion.img
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  src={selectedImage}
+                  alt=""
+                  className="max-w-full max-h-full rounded-xl shadow-2xl"
+                />
+                <button className="absolute top-6 right-6 text-white text-5xl hover:scale-110 transition-transform">
+                  ×
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 px-6 bg-emerald-600">
+      {/* Test */}
+      <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 to-teal-600">
         <div className="max-w-5xl mx-auto">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -413,17 +478,17 @@ const Home = () => {
             {testimonials.map((t, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.2 }}
-                className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl text-white"
+                className="bg-white/10 backdrop-blur-md p-6 rounded-2xl text-white border border-white/20"
               >
-                <p className="italic mb-4">"{t.text}"</p>
+                <p className="italic mb-4 text-emerald-100">"{t.text}"</p>
                 <div className="flex items-center gap-3">
                   <img
                     src={t.avatar}
                     alt=""
-                    className="w-12 h-12 rounded-full"
+                    className="w-12 h-12 rounded-full ring-2 ring-white"
                   />
                   <div>
                     <p className="font-bold">{t.name}</p>
@@ -449,14 +514,15 @@ const Home = () => {
           {faqs.map((faq, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className="mb-4"
             >
-              <details className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 cursor-pointer">
-                <summary className="font-bold text-lg text-emerald-600 dark:text-emerald-400">
+              <details className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 cursor-pointer group">
+                <summary className="font-bold text-lg text-emerald-600 dark:text-emerald-400 flex justify-between items-center">
                   {faq.q}
+                  <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
                 </summary>
                 <p className="mt-3 text-gray-600 dark:text-gray-300">{faq.a}</p>
               </details>
@@ -465,46 +531,139 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 to-teal-600">
+      {/* Newsletter  */}
+      <section className="py-20 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 relative overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600" />
+          <motion.div
+            animate={{
+              background: [
+                "radial-gradient(circle at 20% 80%, rgba(120, 219, 226, 0.3) 0%, transparent 50%)",
+                "radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.3) 0%, transparent 50%)",
+                "radial-gradient(circle at 20% 80%, rgba(120, 219, 226, 0.3) 0%, transparent 50%)",
+              ],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0"
+          />
+        </div>
+
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
           >
             নতুন ইভেন্টের খবর পান
           </motion.h2>
-          <p className="text-xl text-emerald-100 mb-10">
-            প্রতি সপ্তাহে আসন্ন ইভেন্টের আপডেট সরাসরি আপনার ইনবক্সে
-          </p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("সাবস্ক্রাইব সফল! Success");
-              setEmail("");
-            }}
-            className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-xl text-emerald-100 mb-10 max-w-2xl mx-auto px-4"
           >
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="আপনার ইমেইল"
-              className="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-emerald-300"
-              required
-            />
-            <button
+            প্রতি সপ্তাহে আসন্ন ইভেন্টের আপডেট সরাসরি আপনার ইনবক্সে
+          </motion.p>
+
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto relative"
+          >
+            <div className="relative flex-1 group">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-emerald-500 transition-colors" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setStatus("idle");
+                  setErrorMsg("");
+                }}
+                placeholder="আপনার ইমেইল"
+                className={`w-full pl-12 pr-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-emerald-300 transition-all duration-300 shadow-lg ${
+                  status === "error" ? "ring-2 ring-red-400" : ""
+                }`}
+                required
+              />
+              {email && (
+                <motion.span
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute left-12 -top-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs px-2 py-1 rounded-full"
+                >
+                  ইমেইল
+                </motion.span>
+              )}
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
-              className="px-8 py-4 bg-white text-emerald-600 font-bold rounded-full hover:bg-gray-100 transition-all shadow-lg"
+              disabled={isLoading}
+              className="px-8 py-4 bg-white text-emerald-600 font-bold rounded-full hover:bg-gray-100 transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              সাবস্ক্রাইব
-            </button>
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>প্রক্রিয়া হচ্ছে...</span>
+                </>
+              ) : (
+                "সাবস্ক্রাইব"
+              )}
+            </motion.button>
           </form>
-          <p className="text-sm text-emerald-200 mt-4">
+
+          <AnimatePresence>
+            {status === "error" && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-sm text-red-200 mt-3 flex items-center justify-center gap-1"
+              >
+                <XCircle className="w-4 h-4" />
+                {errorMsg}
+              </motion.p>
+            )}
+            {status === "success" && (
+              <motion.p
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="text-sm text-emerald-100 mt-3 flex items-center justify-center gap-1"
+              >
+                <CheckCircle className="w-4 h-4" />
+                সফলভাবে সাবস্ক্রাইব করা হয়েছে!
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            viewport={{ once: true }}
+            className="text-sm text-emerald-200 mt-6"
+          >
             কোনো স্প্যাম নয়। যেকোনো সময় আনসাবস্ক্রাইব করতে পারবেন।
-          </p>
+          </motion.p>
         </div>
+
+        <motion.div
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-10 left-10 w-32 h-32 bg-emerald-400 rounded-full filter blur-3xl opacity-20"
+        />
+        <motion.div
+          animate={{ y: [0, 20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-10 right-10 w-40 h-40 bg-teal-400 rounded-full filter blur-3xl opacity-20"
+        />
       </section>
 
       {/* CSS Animations */}

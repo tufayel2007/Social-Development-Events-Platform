@@ -75,7 +75,7 @@ const EventDetails = () => {
 
     setJoining(true);
     try {
-      const res = await fetch(`/api/events/${id}/join`, {
+      const res = await fetch(`${API_URL}/api/events/${id}/join`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userEmail: user.email }),
@@ -198,7 +198,7 @@ const EventDetails = () => {
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.8 }}
-              src={event.thumbnail1 || "https://i.imgur.com/6b4Xb.jpg"}
+              src={event.thumbnail || "https://i.imgur.com/6b4Xb.jpg"}
               alt={event.title}
               className="w-full h-96 md:h-[520px] object-cover"
             />

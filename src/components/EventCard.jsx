@@ -8,7 +8,7 @@ const EventCard = ({ event }) => {
       className="bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3"
     >
       <img
-        src={event.thumbnail1 || "https://i.imgur.com/6b4Xb.jpg"}
+        src={event.thumbnail || "https://i.imgur.com/6b4Xb.jpg"}
         alt={event.title}
         className="w-full h-64 object-cover"
       />

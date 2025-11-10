@@ -16,7 +16,7 @@ const UpdateEvent = () => {
     title: "",
     description: "",
     eventType: "",
-    thumbnail1: "", // CreateEvent-এ 'thumbnail' ছিল, কিন্তু সার্ভারে 'thumbnail1' তাই এখানেও ঠিক করা হলো
+    thumbnail: "", // CreateEvent-এ 'thumbnail' ছিল, কিন্তু সার্ভারে 'thumbnail' তাই এখানেও ঠিক করা হলো
     location: "",
     eventDate: null,
   });
@@ -42,7 +42,7 @@ const UpdateEvent = () => {
         title: eventData.title || "",
         description: eventData.description || "",
         eventType: eventData.eventType || "",
-        thumbnail1: eventData.thumbnail1 || "",
+        thumbnail: eventData.thumbnail || "",
         location: eventData.location || "",
         // ডেটাবেজ থেকে আসা স্ট্রিংটিকে Date অবজেক্টে রূপান্তর করা হলো
         eventDate: eventData.eventDate ? new Date(eventData.eventDate) : null,
@@ -88,7 +88,7 @@ const UpdateEvent = () => {
       return;
     }
 
-    const { title, description, eventType, thumbnail1, location, eventDate } =
+    const { title, description, eventType, thumbnail, location, eventDate } =
       formData;
 
     // validation
@@ -96,7 +96,7 @@ const UpdateEvent = () => {
       !title ||
       !description ||
       !eventType ||
-      !thumbnail1 ||
+      !thumbnail ||
       !location ||
       !eventDate
     ) {
@@ -110,15 +110,15 @@ const UpdateEvent = () => {
 
     const updatedData = {
       ...formData,
-      thumbnail1: thumbnail1.trim(),
+      thumbnail: thumbnail.trim(),
       location: location.trim(),
       eventDate: eventDate.toISOString(), // ISO স্ট্রিং আকারে পাঠানো
       creatorEmail: creatorEmail, // সার্ভারকে চেক করার জন্য creatorEmail পাঠানো হলো
     };
 
-    // CreateEvent-এ formData.thumbnail ছিল, কিন্তু সার্ভারে thumbnail1 - তাই এখানেও ঠিক করা হলো
+    // CreateEvent-এ formData.thumbnail ছিল, কিন্তু সার্ভারে thumbnail - তাই এখানেও ঠিক করা হলো
     if (updatedData.thumbnail) {
-      updatedData.thumbnail1 = updatedData.thumbnail;
+      updatedData.thumbnail = updatedData.thumbnail;
       delete updatedData.thumbnail;
     }
 
@@ -204,8 +204,8 @@ const UpdateEvent = () => {
             <input
               type="url"
               placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
-              value={formData.thumbnail1} // সার্ভারের সঙ্গে মিল রেখে thumbnail1 ব্যবহার করা হলো
-              onChange={(e) => handleChange("thumbnail1")(e.target.value)}
+              value={formData.thumbnail} // সার্ভারের সঙ্গে মিল রেখে thumbnail ব্যবহার করা হলো
+              onChange={(e) => handleChange("thumbnail")(e.target.value)}
               className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
               required
             />
