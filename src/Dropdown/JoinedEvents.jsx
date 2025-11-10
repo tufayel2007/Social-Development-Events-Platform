@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/JoinedEvents.jsx
+
 import React, {
   useState,
   useEffect,
@@ -14,7 +14,6 @@ import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
 import EventCard from "../components/EventCard";
 
-// Icons (you can use any icon library, here using SVG for simplicity)
 const SearchIcon = () => (
   <svg
     className="w-5 h-5"
@@ -90,10 +89,8 @@ const JoinedEvents = () => {
   const pullRef = useRef(null);
   const [pullY, setPullY] = useState(0);
 
-  // Measure pull distance
   const [measureRef, bounds] = useMeasure();
 
-  // Toggle Dark Mode
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -102,7 +99,6 @@ const JoinedEvents = () => {
     }
   }, [darkMode]);
 
-  // Fetch Events (unchanged backend logic)
   const fetchJoinedEvents = useCallback(
     async (isRefresh = false) => {
       if (!user) return;
@@ -146,7 +142,6 @@ const JoinedEvents = () => {
     else setLoading(false);
   }, [user, fetchJoinedEvents]);
 
-  // Pull to Refresh Logic
   const handlePull = useCallback(
     (e) => {
       if (!pullRef.current || refreshing || loading) return;
@@ -166,7 +161,6 @@ const JoinedEvents = () => {
     setPullY(0);
   }, [pullY, fetchJoinedEvents]);
 
-  // Filter & Search Logic
   const filteredEvents = useMemo(() => {
     return joinedEvents.filter((event) => {
       const matchesSearch =
@@ -178,13 +172,11 @@ const JoinedEvents = () => {
     });
   }, [joinedEvents, searchTerm, filterCategory]);
 
-  // Extract unique categories
   const categories = useMemo(() => {
     const cats = ["all", ...new Set(joinedEvents.map((e) => e.category))];
     return cats;
   }, [joinedEvents]);
 
-  // Skeleton Loader Component
   const SkeletonCard = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -197,7 +189,6 @@ const JoinedEvents = () => {
     </motion.div>
   );
 
-  // Empty State with Animation
   const EmptyState = () => (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -267,7 +258,6 @@ const JoinedEvents = () => {
       onTouchEnd={handlePullEnd}
       ref={measureRef}
     >
-      {/* Pull to Refresh Indicator */}
       <AnimatePresence>
         {pullY > 0 && (
           <motion.div
@@ -292,7 +282,6 @@ const JoinedEvents = () => {
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -302,7 +291,6 @@ const JoinedEvents = () => {
             আপনার জয়েন করা ইভেন্টগুলো
           </h1>
 
-          {/* Dark Mode Toggle */}
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
@@ -311,7 +299,6 @@ const JoinedEvents = () => {
           </button>
         </motion.div>
 
-        {/* Search & Filter Bar */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -342,7 +329,6 @@ const JoinedEvents = () => {
           </select>
         </motion.div>
 
-        {/* Events Grid */}
         <AnimatePresence>
           {filteredEvents.length === 0 ? (
             <EmptyState />
@@ -366,7 +352,6 @@ const JoinedEvents = () => {
   );
 };
 
-// Animated Event Card Wrapper
 const EventCardWithAnimation = React.memo(({ event, index }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 

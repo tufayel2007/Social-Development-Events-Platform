@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/Register.jsx
+
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -32,7 +32,6 @@ const Register = () => {
   const [loading, setLoading] = React.useState(false);
   const [focused, setFocused] = React.useState("");
 
-  // লগইন থাকলে রিডাইরেক্ট
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) navigate("/upcomingEvents");
@@ -60,7 +59,6 @@ const Register = () => {
     return errors;
   };
 
-  // Email/Password Register
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { fullName, email, password, confirmPassword, photoURL } = formData;
@@ -109,7 +107,6 @@ const Register = () => {
     }
   };
 
-  // Google Register (same as login)
   const handleGoogleRegister = async () => {
     const provider = new GoogleAuthProvider();
     setLoading(true);
@@ -130,12 +127,10 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden relative">
       <ToastContainer position="top-center" theme="light" autoClose={3000} />
 
-      {/* Animated Background Blobs */}
       <div className="absolute top-10 left-10 w-80 h-80 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
       <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
-      {/* Register Card */}
       <div className="relative max-w-md w-full bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 z-10 transform transition-all duration-500 hover:scale-[1.01]">
         {/* Logo + Title */}
         <div className="text-center mb-8">
@@ -152,9 +147,7 @@ const Register = () => {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Full Name - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="text"
@@ -182,7 +175,6 @@ const Register = () => {
             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Photo URL - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="url"
@@ -209,7 +201,6 @@ const Register = () => {
             <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Email - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type="email"
@@ -237,7 +228,6 @@ const Register = () => {
             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
 
-          {/* Password - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -272,7 +262,6 @@ const Register = () => {
             </button>
           </div>
 
-          {/* Password Strength */}
           {formData.password && (
             <ul className="text-xs space-y-1 pl-2">
               {passwordErrors.map((err, i) => (
@@ -289,7 +278,6 @@ const Register = () => {
             </ul>
           )}
 
-          {/* Confirm Password - LOGIN এর মতো স্টাইল */}
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -324,7 +312,6 @@ const Register = () => {
             </button>
           </div>
 
-          {/* Confirm Match */}
           {formData.confirmPassword && (
             <p
               className={`text-sm font-medium flex items-center gap-1 ${
@@ -341,7 +328,6 @@ const Register = () => {
             </p>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={
@@ -365,7 +351,6 @@ const Register = () => {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
           <span className="px-4 text-sm text-gray-500 font-medium">
@@ -374,9 +359,7 @@ const Register = () => {
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
         </div>
 
-        {/* Social Logins - শুধু Google কাজ করে */}
         <div className="grid grid-cols-3 gap-3">
-          {/* Google - কাজ করে */}
           <button
             onClick={handleGoogleRegister}
             disabled={loading}
@@ -386,7 +369,6 @@ const Register = () => {
             <FcGoogle size={24} className="group-hover:animate-pulse" />
           </button>
 
-          {/* GitHub - কাজ করে না */}
           <button
             onClick={handleGoogleRegister}
             disabled
@@ -396,7 +378,6 @@ const Register = () => {
             <FaSquareGithub size={24} className="group-hover:animate-pulse" />
           </button>
 
-          {/* Apple - কাজ করে না */}
           <button
             disabled
             onClick={handleGoogleRegister}
@@ -407,9 +388,8 @@ const Register = () => {
           </button>
         </div>
 
-        {/* Login Link */}
         <p className="text-center mt-8 text-gray-600">
-          Have an account?{" "}
+          Have an account?
           <Link
             to="/login"
             className="font-bold text-emerald-600 hover:text-emerald-800 hover:underline transition"
@@ -419,7 +399,6 @@ const Register = () => {
         </p>
       </div>
 
-      {/* CSS Animation */}
       <style jsx>{`
         @keyframes blob {
           0%,

@@ -134,14 +134,13 @@ const Home = () => {
       color: "zinc",
     },
     {
-      icon: "Toilet",
+      icon: " Public Toilet",
       title: "পাবলিক টয়লেট",
       desc: "স্বাস্থ্যবিধি উন্নয়ন",
       color: "stone",
     },
   ];
 
-  // Gallery
   const gallery = [
     gallery1,
     gallery2,
@@ -153,7 +152,6 @@ const Home = () => {
     gallery8,
   ];
 
-  // Testimonials
   const testimonials = [
     {
       name: "রহিম আহমেদ",

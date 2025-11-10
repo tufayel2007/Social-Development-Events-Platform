@@ -11,14 +11,12 @@ const Navbar = () => {
   const [user, setUser] = React.useState(null);
   const { theme, toggleTheme } = useTheme();
 
-  // 💡 ১. নতুন স্টেট যুক্ত করা: লোডিং অবস্থা ট্র্যাক করার জন্য
   const [loading, setLoading] = React.useState(true);
 
-  // Firebase ইউজার চেক
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      // 💡 ২. Firebase চেক শেষ হলে লোডিং বন্ধ করা
+
       setLoading(false);
     });
     return () => unsubscribe();
@@ -58,7 +56,6 @@ const Navbar = () => {
     </>
   );
 
-  // 💡 ৩. লোডিং অবস্থায় একটি স্পিনার বা খালি নেভিগেশন বার দেখানো
   if (loading) {
     return (
       <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50 h-16 flex items-center justify-center">
@@ -69,7 +66,6 @@ const Navbar = () => {
 
   return (
     <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50">
-      {/* লোগো */}
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -111,7 +107,6 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end flex items-center gap-3">
-        {/* থিম টগল */}
         <button
           onClick={toggleTheme}
           className="btn btn-ghost btn-circle"
@@ -124,7 +119,6 @@ const Navbar = () => {
           )}
         </button>
 
-        {/* লগইন / প্রোফাইল */}
         {!user ? (
           <NavLink
             to="/login"

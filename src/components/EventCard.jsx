@@ -1,15 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// EventCard কম্পোনেন্টটি event prop হিসাবে একটি ইভেন্ট অবজেক্ট পাবে।
 const EventCard = ({ event }) => {
   return (
     <div
       key={event._id}
       className="bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3"
     >
-      {/* 💡 থাম্বনেইল প্রদর্শন: Event Data-তে থাকা 'thumbnail1' ফিল্ডটি ব্যবহার করা হচ্ছে */}
-      {/* যদি thumbnail1 না থাকে, তাহলে একটি ডিফল্ট ইমেজ দেখানো হবে, যেমনটা UpcomingEvents-এ ছিল। */}
       <img
         src={event.thumbnail1 || "https://i.imgur.com/6b4Xb.jpg"}
         alt={event.title}

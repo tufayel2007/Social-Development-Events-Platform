@@ -15,12 +15,11 @@ import {
   MapPin,
   Sparkles,
   Loader2,
-  ChevronLeft, // Added for pagination
-  ChevronRight, // Added for pagination
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { auth, onAuthStateChanged } from "../firebase/FirebaseConfig";
 
-// --- Constants ---
 const eventTypes = [
   { value: "", label: "সব ধরন" },
   { value: "Education", label: "শিক্ষা" },
@@ -204,7 +203,6 @@ const UpcomingEvents = () => {
   );
   const navigate = useNavigate();
 
-  // Dark Mode
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -393,7 +391,7 @@ const UpcomingEvents = () => {
           ) : (
             <>
               <motion.div
-                key={currentPage} // Key change for page transition animation
+                key={currentPage}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -407,7 +405,6 @@ const UpcomingEvents = () => {
                 </AnimatePresence>
               </motion.div>
 
-              {/* --- Pagination Controls --- */}
               {totalPages > 1 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -415,7 +412,6 @@ const UpcomingEvents = () => {
                   transition={{ delay: 0.2 }}
                   className="flex justify-center items-center space-x-2 mt-16"
                 >
-                  {/* Previous Button */}
                   <button
                     onClick={() => goToPage(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -428,10 +424,9 @@ const UpcomingEvents = () => {
                     <ChevronLeft className="w-6 h-6" />
                   </button>
 
-                  {/* Page Numbers */}
                   <AnimatePresence mode="wait">
                     <motion.div
-                      key={currentPage} // Key for animation
+                      key={currentPage}
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
@@ -454,7 +449,7 @@ const UpcomingEvents = () => {
                     </motion.div>
                   </AnimatePresence>
 
-                  {/* Next Button */}
+                  {/* N-B*/}
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
@@ -473,7 +468,7 @@ const UpcomingEvents = () => {
         </div>
       </div>
 
-      {/* Shimmer Animation */}
+      {/*  Animation */}
       <style jsx>{`
         @keyframes shimmer {
           0% {

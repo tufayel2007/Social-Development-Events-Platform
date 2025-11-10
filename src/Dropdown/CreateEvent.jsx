@@ -19,10 +19,7 @@ const CreateEvent = () => {
     eventDate: null,
   });
   const [loading, setLoading] = useState(false);
-
-  // লগইন না থাকলে রিডাইরেক্ট
   useEffect(() => {
-    // 💡 Firebase-এর অ্যাসিঙ্ক প্রকৃতি নিশ্চিত করতে setTimeout ব্যবহার করুন
     const timer = setTimeout(() => {
       if (!auth.currentUser) {
         Swal.fire({
@@ -31,7 +28,7 @@ const CreateEvent = () => {
           text: "ইভেন্ট তৈরি করতে লগইন করতে হবে",
         }).then(() => navigate("/login"));
       }
-    }, 1000); // 1 সেকেন্ড অপেক্ষা করা হলো
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -39,14 +36,12 @@ const CreateEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // লগইন চেক
     if (!auth.currentUser) {
       Swal.fire("Error", "লগইন করুন!", "error");
       navigate("/login");
       return;
     }
 
-    // সঠিক ইমেইল বের করো (Google + Email/Password দুটোই কাজ করবে)
     let creatorEmail = auth.currentUser.email;
     if (!creatorEmail && auth.currentUser.providerData?.length > 0) {
       creatorEmail = auth.currentUser.providerData[0].email;
@@ -81,11 +76,11 @@ const CreateEvent = () => {
       title: title.trim(),
       description: description.trim(),
       eventType,
-      // 💡 আপডেট: 'thumbnail1' পরিবর্তন করে 'thumbnail' করা হলো
+
       thumbnail: thumbnail.trim(),
       location: location.trim(),
       eventDate: eventDate.toISOString(),
-      creatorEmail: creatorEmail, // এটাই সঠিক ইমেইল!
+      creatorEmail: creatorEmail,
     };
 
     setLoading(true);
@@ -108,7 +103,7 @@ const CreateEvent = () => {
         timer: 1500,
       });
 
-      // ফর্ম রিসেট + ManageEvents এ যাও
+      //  ManageEvents
       setFormData({
         title: "",
         description: "",
@@ -120,7 +115,6 @@ const CreateEvent = () => {
 
       navigate("/ManageEvents", { state: { refresh: true } });
     } catch (err) {
-      // 💡 ত্রুটি আরও স্পষ্ট করে দেখানো
       console.error("Event Creation Error:", err);
       Swal.fire("Error", `ইভেন্ট তৈরি ব্যর্থ: ${err.message}`, "error");
     } finally {
@@ -128,7 +122,6 @@ const CreateEvent = () => {
     }
   };
 
-  // ফর্ম ইনপুট হ্যান্ডলার
   const handleChange = (field) => (value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -147,7 +140,6 @@ const CreateEvent = () => {
 
         <div className="bg-white rounded-3xl shadow-2xl p-10 dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700">
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* ১. ইভেন্টের নাম */}
             <input
               type="text"
               placeholder="ইভেন্টের নাম *"
@@ -157,7 +149,6 @@ const CreateEvent = () => {
               required
             />
 
-            {/* ২. বিস্তারিত বিবরণ */}
             <textarea
               placeholder="বিস্তারিত বিবরণ *"
               rows="5"
@@ -167,7 +158,6 @@ const CreateEvent = () => {
               required
             />
 
-            {/* ৩. ইভেন্টের ধরন */}
             <select
               value={formData.eventType}
               onChange={(e) => handleChange("eventType")(e.target.value)}
@@ -191,7 +181,6 @@ const CreateEvent = () => {
               </option>
             </select>
 
-            {/* ৪. ছবির লিংক */}
             <input
               type="url"
               placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
@@ -201,7 +190,6 @@ const CreateEvent = () => {
               required
             />
 
-            {/* ৫. স্থান */}
             <input
               type="text"
               placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
@@ -211,7 +199,6 @@ const CreateEvent = () => {
               required
             />
 
-            {/* ৬. তারিখ ও সময় */}
             <DatePicker
               selected={formData.eventDate}
               onChange={(date) => handleChange("eventDate")(date)}
@@ -224,7 +211,6 @@ const CreateEvent = () => {
               required
             />
 
-            {/* ৭. সাবমিট বাটন */}
             <button
               type="submit"
               disabled={loading}

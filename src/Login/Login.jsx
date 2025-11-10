@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/Login.jsx
+
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -24,7 +24,6 @@ const Login = () => {
   const [loading, setLoading] = React.useState(false);
   const [focused, setFocused] = React.useState("");
 
-  // লগইন থাকলে রিডাইরেক্ট
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -34,7 +33,6 @@ const Login = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Email/Password Login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -44,7 +42,6 @@ const Login = () => {
 
     setLoading(true);
     try {
-      // 1. Firebase Login
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -52,18 +49,16 @@ const Login = () => {
       );
       const user = userCredential.user;
 
-      // 2. 💡 নতুন সংযোজন: MongoDB-তে ইউজার ডেটা সেভ করা বা আপডেট করা
       await fetch(
         "https://social-development-events-platform-brown.vercel.app/api/LOGIN_USER/save-user",
         {
-          // সার্ভার URL পরিবর্তন করুন
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             uid: user.uid,
             email: user.email,
-            fullName: user.displayName || "N/A", // যদি নাম না থাকে
-            photoURL: user.photoURL || "N/A", // যদি ছবি না থাকে
+            fullName: user.displayName || "N/A",
+            photoURL: user.photoURL || "N/A",
           }),
         }
       );
@@ -73,7 +68,6 @@ const Login = () => {
       });
       setTimeout(() => navigate("/upcomingEvents"), 1500);
     } catch (error) {
-      // 💡 এই অংশটি যোগ/আপডেট করুন
       console.error("Firebase Login Error:", error.code, error.message);
 
       let msg = "Login failed! Please check your credentials.";
@@ -100,11 +94,9 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // 2. 💡 নতুন সংযোজন: MongoDB-তে ইউজার ডেটা সেভ করা বা আপডেট করা
       await fetch(
         "https://social-development-events-platform-brown.vercel.app/api/LOGIN_USER/save-user",
         {
-          // সার্ভার URL পরিবর্তন করুন
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -121,7 +113,6 @@ const Login = () => {
       });
       setTimeout(() => navigate("/upcomingEvents"), 1500);
     } catch (error) {
-      // 💡 এই অংশটি যোগ/আপডেট করুন
       console.error("Firebase Google Login Error:", error.code, error.message);
       toast.error("Google login failed. Try again!", { icon: "Warning" });
     } finally {
@@ -140,14 +131,11 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden relative">
       <ToastContainer position="top-center" theme="light" autoClose={3000} />
 
-      {/* Animated Background Blobs */}
       <div className="absolute top-10 left-10 w-80 h-80 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
       <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
-      {/* Login Card */}
       <div className="relative max-w-md w-full bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 z-10 transform transition-all duration-500 hover:scale-[1.01]">
-        {/* Logo + Title */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-lg animate-pulse">
@@ -162,9 +150,7 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleEmailLogin} className="space-y-5">
-          {/* Email */}
           <div className="relative">
             <input
               type="email"
@@ -188,7 +174,6 @@ const Login = () => {
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"></div>
           </div>
 
-          {/* Password */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -206,7 +191,7 @@ const Login = () => {
       focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
       bg-gradient-to-r from-white to-emerald-50/30 dark:from-gray-900 dark:to-gray-800
       placeholder-gray-500 dark:placeholder-gray-400
-      text-gray-800 dark:text-gray-100`} // ✅ টেক্সট কনট্রাস্ট ঠিক করা হয়েছে
+      text-gray-800 dark:text-gray-100`}
               required
             />
             <button
@@ -219,7 +204,6 @@ const Login = () => {
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"></div>
           </div>
 
-          {/* Forget Password */}
           <div className="text-right">
             <Link
               to="/ForgotPassword"
@@ -229,7 +213,6 @@ const Login = () => {
             </Link>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -249,7 +232,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
           <span className="px-4 text-sm text-gray-500 font-medium">
@@ -258,7 +240,6 @@ const Login = () => {
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
         </div>
 
-        {/* Social Logins */}
         <div className="grid grid-cols-3 gap-4">
           <button
             onClick={handleGoogleLogin}
@@ -281,7 +262,6 @@ const Login = () => {
           </button>
         </div>
 
-        {/* Register Link */}
         <p className="text-center mt-8 text-gray-600">
           New here?{" "}
           <Link
@@ -293,7 +273,6 @@ const Login = () => {
         </p>
       </div>
 
-      {/* CSS Animation */}
       <style jsx>{`
         @keyframes blob {
           0%,

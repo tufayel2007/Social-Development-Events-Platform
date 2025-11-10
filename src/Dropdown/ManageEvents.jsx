@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/private/ManageEvents.jsx
+
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
 import { useInView } from "react-intersection-observer";
 
-// Icons (react-icons)
 import { FiEdit3, FiEye, FiTrash2, FiRefreshCw, FiPlus } from "react-icons/fi";
 
 const API_URL = "https://social-development-events-platform-brown.vercel.app";
@@ -27,7 +26,6 @@ const ManageEvents = () => {
 
   const userEmail = user?.email || user?.providerData?.[0]?.email || null;
 
-  // Auto refresh from CreateEvent
   useEffect(() => {
     if (location.state?.refresh && userEmail) {
       queryClient.invalidateQueries(["myEvents", userEmail]);
@@ -35,7 +33,6 @@ const ManageEvents = () => {
     }
   }, [location.state, queryClient, userEmail, navigate]);
 
-  // Fetch My Events (লজিক একই)
   const {
     data: events = [],
     isLoading,
@@ -61,7 +58,6 @@ const ManageEvents = () => {
     staleTime: 1000 * 10,
   });
 
-  // Delete Mutation (লজিক একই)
   const deleteMutation = useMutation({
     mutationFn: async (eventId) => {
       const res = await fetch(
@@ -102,7 +98,6 @@ const ManageEvents = () => {
     });
   };
 
-  // Filter + Search + Sort
   const filteredEvents = events
     .filter(
       (e) =>
@@ -127,7 +122,6 @@ const ManageEvents = () => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-teal-900 py-16 px-4 transition-colors">
       <Toaster position="top-right" />
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -141,7 +135,6 @@ const ManageEvents = () => {
           </p>
         </motion.div>
 
-        {/* Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -198,7 +191,6 @@ const ManageEvents = () => {
           </div>
         </motion.div>
 
-        {/* Error */}
         {isError && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -209,7 +201,6 @@ const ManageEvents = () => {
           </motion.div>
         )}
 
-        {/* No Events */}
         {filteredEvents.length === 0 && !isLoading && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -235,7 +226,6 @@ const ManageEvents = () => {
           </motion.div>
         )}
 
-        {/* Events Grid */}
         <AnimatePresence>
           {filteredEvents.length > 0 && (
             <motion.div
@@ -259,7 +249,6 @@ const ManageEvents = () => {
         </AnimatePresence>
       </div>
 
-      {/* Back to Top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="fixed bottom-8 right-8 p-4 bg-green-600 text-white rounded-full shadow-2xl z-50 hover:scale-110 transition"
@@ -270,7 +259,6 @@ const ManageEvents = () => {
   );
 };
 
-// Event Card with Upgraded Edit Button
 const EventCard = React.memo(
   ({ event, index, onDelete, isDeleting, navigate }) => {
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -331,9 +319,7 @@ const EventCard = React.memo(
             </p>
           </div>
 
-          {/* Upgraded Action Buttons */}
           <div className="flex gap-2 pt-3">
-            {/* View */}
             <button
               onClick={() => window.open(`/event/${event._id}`, "_blank")}
               className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition flex items-center justify-center gap-1 group"
@@ -342,7 +328,6 @@ const EventCard = React.memo(
               <FiEye className="group-hover:scale-110 transition" /> View
             </button>
 
-            {/* Edit - আগের আপডেট বাটনের ফিচার */}
             <button
               onClick={() => navigate(`/updateEvent/${event._id}`)}
               className="flex-1 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition flex items-center justify-center gap-1 group shadow-md hover:shadow-lg"
@@ -368,7 +353,6 @@ const EventCard = React.memo(
   }
 );
 
-// Skeleton Grid (একই)
 const SkeletonGrid = () => (
   <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 dark:to-teal-900 flex items-center justify-center p-4">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full max-w-7xl">

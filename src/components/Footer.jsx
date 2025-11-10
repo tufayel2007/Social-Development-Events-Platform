@@ -49,7 +49,6 @@ const Footer = () => {
 
   const currentYear = new Date().getFullYear();
 
-  // Dark Mode Detection
   useEffect(() => {
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -203,7 +202,6 @@ const Footer = () => {
         toastOptions={{ className: "font-medium" }}
       />
 
-      {/* Back to Top Button */}
       <AnimatePresence>
         {scrolled && (
           <motion.button
@@ -219,7 +217,6 @@ const Footer = () => {
         )}
       </AnimatePresence>
 
-      {/* Live Chat Button */}
       <motion.button
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -237,7 +234,6 @@ const Footer = () => {
         id="footer"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Top Banner */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -247,12 +243,11 @@ const Footer = () => {
               Limited Time: Get <span className="text-yellow-300">20% OFF</span>{" "}
               on First Order! Use Code:{" "}
               <span className="font-mono bg-black/30 px-2 py-1 rounded">
-                GREEN20
+                SDEP
               </span>
             </p>
           </motion.div>
 
-          {/* Top Section */}
           <div className="pb-10 border-b border-[#3c3e59] flex flex-col lg:flex-row justify-between items-start gap-8">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -301,7 +296,6 @@ const Footer = () => {
             </motion.div>
           </div>
 
-          {/* Main Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-12">
             {footerLinks.map((column, i) => (
               <motion.div
@@ -311,7 +305,6 @@ const Footer = () => {
                 transition={{ delay: i * 0.1 }}
                 className="col-span-1"
               >
-                {/* Mobile Accordion */}
                 <div className="md:hidden">
                   <button
                     onClick={() => setOpenSection(openSection === i ? null : i)}
@@ -355,7 +348,6 @@ const Footer = () => {
                   </AnimatePresence>
                 </div>
 
-                {/* Desktop View */}
                 <div className="hidden md:block">
                   <h4 className="text-lg font-bold text-green-400 border-b-2 border-green-500 pb-1 mb-4 inline-block flex items-center gap-2">
                     {column.icon} {column.title}
@@ -386,7 +378,6 @@ const Footer = () => {
               </motion.div>
             ))}
 
-            {/* Newsletter */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -434,7 +425,6 @@ const Footer = () => {
                 </motion.button>
               </form>
 
-              {/* Certifications */}
               <div className="flex flex-wrap gap-3 mt-6">
                 {certifications.map((cert, i) => {
                   const Icon = cert.icon;
@@ -453,7 +443,6 @@ const Footer = () => {
             </motion.div>
           </div>
 
-          {/* Contact & Extra */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -488,7 +477,6 @@ const Footer = () => {
             })}
           </motion.div>
 
-          {/* Bottom Bar */}
           <div className="border-t border-[#3c3e59] pt-6 flex flex-col lg:flex-row justify-between items-center text-xs text-gray-400 gap-4">
             <p className="text-center lg:text-left">
               © {currentYear}{" "}
@@ -535,7 +523,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Tagline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

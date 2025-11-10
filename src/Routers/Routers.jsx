@@ -57,7 +57,7 @@ const Routers = createBrowserRouter([
         element: <EventDetails></EventDetails>,
       },
       {
-        path: "/updateEvent/:id", // হাইফেন ছাড়া বানান ঠিক রেখেছি, কিন্তু প্যারামিটার যোগ করেছি
+        path: "/updateEvent/:id",
         element: <UpdateEvent></UpdateEvent>,
       },
     ],

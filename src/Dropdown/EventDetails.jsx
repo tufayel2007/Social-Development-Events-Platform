@@ -17,7 +17,7 @@ const EventDetails = () => {
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [initialLoading, setInitialLoading] = useState(true); // ফুল পেজ লোডার
+  const [initialLoading, setInitialLoading] = useState(true);
   const [joining, setJoining] = useState(false);
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [qrCode, setQrCode] = useState("");
@@ -27,21 +27,18 @@ const EventDetails = () => {
 
   const eventUrl = `${window.location.origin}/event/${id}`;
 
-  // Auth Check + Redirect to Login if not logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
-        // লগইন না থাকলে সরাসরি লগইন পেজে পাঠাও
         navigate("/login", { replace: true });
       } else {
         setUser(currentUser);
-        setInitialLoading(false); // শুধু লগইন থাকলে লোডিং বন্ধ
+        setInitialLoading(false);
       }
     });
     return () => unsubscribe();
   }, [navigate]);
 
-  // Fetch Event (শুধু লগইন থাকলে)
   useEffect(() => {
     if (!user) return;
 
@@ -70,7 +67,6 @@ const EventDetails = () => {
     fetchEvent();
   }, [id, user, navigate]);
 
-  // Join Event
   const handleJoin = async () => {
     if (!user) {
       navigate("/login");
@@ -120,7 +116,6 @@ const EventDetails = () => {
       )
     : 0;
 
-  // Full Page Loader (লগইন না থাকলে দেখাবে না, কারণ রিডাইরেক্ট হয়ে যাবে)
   if (initialLoading) {
     return (
       <motion.div
@@ -143,7 +138,6 @@ const EventDetails = () => {
     );
   }
 
-  // Loading Skeleton
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 py-16 px-4">
@@ -199,7 +193,6 @@ const EventDetails = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-green-100 dark:border-gray-700"
         >
-          {/* Hero Image */}
           <div className="relative">
             <motion.img
               initial={{ scale: 1.2 }}
@@ -211,7 +204,6 @@ const EventDetails = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
-            {/* Badges */}
             <div className="absolute top-6 left-6 flex gap-4">
               <span className="px-6 py-3 bg-green-600 text-white rounded-full text-lg font-bold shadow-2xl backdrop-blur-md">
                 {event.eventType}
@@ -223,7 +215,6 @@ const EventDetails = () => {
               )}
             </div>
 
-            {/* Share Buttons */}
             <div className="absolute top-6 right-6 flex gap-3">
               <button
                 onClick={copyLink}
@@ -280,7 +271,6 @@ const EventDetails = () => {
               {event.description}
             </motion.p>
 
-            {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {[
                 { label: "স্থান", value: event.location },
@@ -312,7 +302,6 @@ const EventDetails = () => {
               ))}
             </div>
 
-            {/* Creator */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -336,7 +325,6 @@ const EventDetails = () => {
               </div>
             </motion.div>
 
-            {/* Join Button */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -362,7 +350,6 @@ const EventDetails = () => {
               )}
             </motion.div>
 
-            {/* Back */}
             <div className="text-center mt-12">
               <button
                 onClick={() => navigate("/upcomingEvents")}
@@ -374,7 +361,6 @@ const EventDetails = () => {
           </div>
         </motion.div>
 
-        {/* QR Modal */}
         <AnimatePresence>
           {showQR && (
             <motion.div
