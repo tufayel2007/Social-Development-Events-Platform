@@ -90,7 +90,7 @@ const Login = () => {
     const provider = new GoogleAuthProvider();
     setLoading(true);
     try {
-      // 1. Firebase Google Popup
+      // 1. Firebase Go
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
