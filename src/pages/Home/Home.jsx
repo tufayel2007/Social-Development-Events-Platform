@@ -136,7 +136,7 @@ const Home = () => {
     {
       icon: " Public Toilet",
       title: "পাবলিক টয়লেট",
-      desc: "স্বাস্থ্যবিন",
+      desc: "স্বাস্থ্যবিধি উন্নয়ন",
       color: "stone",
     },
   ];
