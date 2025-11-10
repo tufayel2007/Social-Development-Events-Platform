@@ -13,7 +13,6 @@ const useAuth = () => {
       setLoading(false);
     });
 
-    // Cleanup
     return () => unsubscribe();
   }, []);
 
