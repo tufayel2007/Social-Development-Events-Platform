@@ -118,7 +118,7 @@ const Home = () => {
     {
       icon: "Globe",
       title: "জলবায়ু সচেতনতা",
-      desc: "পরিবেশ ",
+      desc: "পরিবেশ শিক্ষা",
       color: "green",
     },
     {
@@ -130,7 +130,7 @@ const Home = () => {
     {
       icon: "Broom",
       title: "ডাস্টবিন স্থাপন",
-      desc: "পরিচ্ছন্নতা উন্নয়ন",
+      desc: "পরিচ্ছন্নন্নয়ন",
       color: "zinc",
     },
     {
