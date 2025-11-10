@@ -83,7 +83,7 @@ const Home = () => {
       icon: "Hospital",
       title: "স্বাস্থ্য ক্যাম্প",
       desc: "ফ্রি চেকআপ ও ওষুধ",
-      color: "p",
+      color: "pink",
     },
     {
       icon: "Clothes",
@@ -112,7 +112,7 @@ const Home = () => {
     {
       icon: "Handshake",
       title: "সম্প্রদায় গঠন",
-      desc: "মিলনমেলা আয়োজন",
+      desc: "মিলনমে",
       color: "teal",
     },
     {
