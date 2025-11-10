@@ -76,13 +76,13 @@ const Home = () => {
     {
       icon: "Water",
       title: "পানি সরবরাহ",
-      desc: "গ্রাdssdgtrdfg",
+      desc: "গ্রামে বিশুদ্ধ পানি",
       color: "cyan",
     },
     {
       icon: "Hospital",
       title: "স্বাস্থ্য ক্যাম্প",
-      desc: "ফ্রি চেকআপ ও ওষুধ",
+      desc: "ফ্রি চেক",
       color: "pink",
     },
     {
