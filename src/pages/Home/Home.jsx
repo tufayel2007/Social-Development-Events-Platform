@@ -57,7 +57,7 @@ const Home = () => {
     },
     {
       icon: "Tree",
-      title: "jojlkjolkjlkmnlkjiop",
+      title: "বৃক্ষরোপণ",
       desc: "প্রতি সপ্তাহে নতুন গাছ",
       color: "lime",
     },
