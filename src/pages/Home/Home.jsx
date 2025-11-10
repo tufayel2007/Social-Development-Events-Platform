@@ -82,7 +82,7 @@ const Home = () => {
     {
       icon: "Hospital",
       title: "স্বাস্থ্য ক্যাম্প",
-      desc: "ফ্রি চেক",
+      desc: "ফ্রি চেকআপ ও ওষুধ",
       color: "pink",
     },
     {
