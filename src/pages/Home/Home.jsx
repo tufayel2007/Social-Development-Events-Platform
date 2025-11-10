@@ -74,7 +74,7 @@ const Home = () => {
       color: "blue",
     },
     {
-      icon: "Water",
+      icon: "Watersdf",
       title: "পানি সরবরাহ",
       desc: "গ্রামে বিশুদ্ধ পানি",
       color: "cyan",
