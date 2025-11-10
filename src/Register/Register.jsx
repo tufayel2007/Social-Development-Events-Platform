@@ -389,7 +389,7 @@ const Register = () => {
         </div>
 
         <p className="text-center mt-8 text-gray-600">
-          Have an account?
+          Have an accou
           <Link
             to="/login"
             className="font-bold text-emerald-600 hover:text-emerald-800 hover:underline transition"
