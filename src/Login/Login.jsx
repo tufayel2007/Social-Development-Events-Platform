@@ -85,7 +85,7 @@ const Login = () => {
     }
   };
 
-  // Google Login
+  // Google
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     setLoading(true);
