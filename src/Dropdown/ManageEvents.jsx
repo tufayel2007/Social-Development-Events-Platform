@@ -321,6 +321,7 @@ const EventCard = React.memo(
 
           <div className="flex gap-2 pt-3">
             <button
+              disabled
               onClick={() => window.open(`/event/${event._id}`, "_blank")}
               className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition flex items-center justify-center gap-1 group"
               title="ইভেন্ট দেখুন"

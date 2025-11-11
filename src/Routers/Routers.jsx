@@ -12,6 +12,7 @@ import ManageEvents from "../Dropdown/ManageEvents";
 import JoinedEvents from "../Dropdown/JoinedEvents";
 import EventDetails from "../Dropdown/EventDetails";
 import UpdateEvent from "../Dropdown/UpdateEvent";
+import HelpDsk from "../pages/Home/HelpDsk";
 
 const Routers = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const Routers = createBrowserRouter([
       {
         path: "/updateEvent/:id",
         element: <UpdateEvent></UpdateEvent>,
+      },
+      {
+        path: "/helpDesk",
+        element: <HelpDsk></HelpDsk>,
       },
     ],
   },

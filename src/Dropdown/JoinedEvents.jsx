@@ -8,75 +8,19 @@ import React, {
   useRef,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import useMeasure from "react-use-measure";
 import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
 import EventCard from "../components/EventCard";
+// ইম্পোর্ট করা হলো নতুন কম্পোনেন্টটি
+import EventCardWithAnimation from "../Dropdown/EventCardWithAnimation";
+
+// --- React Icons ইম্পোর্ট করা হয়েছে ---
+import { FaSearch, FaFilter } from "react-icons/fa";
+
 const API_URL = "https://social-development-events-platform-brown.vercel.app";
-const SearchIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-    />
-  </svg>
-);
 
-const FilterIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M3 4a1 1 0 011-1h16a1 1 0 011 1m-5 6h5m-5 6h5m-9-6H4m-1 6h3"
-    />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-    />
-  </svg>
-);
-
-const SunIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M12 3v1m0 16v1m8.485-11.515l-.707.707M5.636 18.364l-.707.707m13.435 0l-.707-.707M5.636 5.636l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"
-    />
-  </svg>
-);
+// --- আগের SVG আইকন ফাংশনগুলো সরিয়ে দেওয়া হয়েছে ---
 
 const JoinedEvents = () => {
   const [joinedEvents, setJoinedEvents] = useState([]);
@@ -292,13 +236,6 @@ const JoinedEvents = () => {
           <h1 className="text-4xl font-extrabold text-green-700 dark:text-emerald-400 text-center sm:text-left">
             আপনার জয়েন করা ইভেন্টগুলো
           </h1>
-
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
-          >
-            {darkMode ? <SunIcon /> : <MoonIcon />}
-          </button>
         </motion.div>
 
         <motion.div
@@ -315,7 +252,8 @@ const JoinedEvents = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
             />
-            <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            {/* সার্চ আইকন */}
+            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
           </div>
 
           <select
@@ -323,6 +261,7 @@ const JoinedEvents = () => {
             onChange={(e) => setFilterCategory(e.target.value)}
             className="px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500"
           >
+            {/* এখানে ফিল্টার আইকনের ব্যবহার নেই, তবে এটি প্রয়োজন হলে ব্যবহার করা যেতে পারে */}
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat === "all" ? "সব ক্যাটাগরি" : cat}
@@ -353,28 +292,5 @@ const JoinedEvents = () => {
     </div>
   );
 };
-
-const EventCardWithAnimation = React.memo(({ event, index }) => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
-  return (
-    <motion.div
-      ref={ref}
-      layout
-      initial={{ opacity: 0, scale: 0.9, y: 50 }}
-      animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{
-        y: -10,
-        scale: 1.03,
-        transition: { duration: 0.3 },
-      }}
-      className="relative"
-    >
-      <EventCard event={event} />
-    </motion.div>
-  );
-});
 
 export default JoinedEvents;

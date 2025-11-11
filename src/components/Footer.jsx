@@ -528,7 +528,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-center mt-10 text-green-400 font-medium italic text-lg"
           >
-            "Your Indoor Oasis. Shop, Care, Thrive."
+            "Social Development Events Platform"
           </motion.div>
         </div>
       </footer>

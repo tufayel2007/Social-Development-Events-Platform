@@ -1,2 +1,25 @@
-@import "tailwindcss";
-@plugin "daisyui";
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* DaisyUI প্লাগিন ইমপোর্ট (এটা দরকার নেই Tailwind-এ, কিন্তু রাখো) */
+/* @plugin "daisyui"; <-- এটা ডিলিট করো, এটা ভুল জায়গায় */
+
+html {
+  @apply min-h-full;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* DaisyUI থিম ট্রানজিশন স্মুথ করতে */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
