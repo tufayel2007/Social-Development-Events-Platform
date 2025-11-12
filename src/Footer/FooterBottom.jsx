@@ -15,15 +15,15 @@ const FooterBottom = ({ currentYear }) => {
 
   return (
     <>
-      <div className="border-t border-[#3c3e59] pt-6 flex flex-col lg:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+      <div className="border-t border-gray-700 dark:border-gray-600 pt-6 flex flex-col lg:flex-row justify-between items-center text-xs text-gray-400 gap-4">
         {/* কপিরাইট */}
         <p className="text-center lg:text-left">
           © {currentYear} <span className="text-green-400 font-bold">SDEP</span>
           . All rights reserved.
           <br className="lg:hidden" />
           <span className="hidden lg:inline"> • </span>
-          Made with <span className="text-red-500">♥</span> for SDEP lovers by{" "}
-          <em className="text-green-400 font-medium">Tufayel</em>
+          Made with <span className="text-red-500">Heart</span> for SDEP lovers
+          by <em className="text-green-400 font-medium">Tufayel</em>
         </p>
 
         {/* পলিসি লিংকস */}

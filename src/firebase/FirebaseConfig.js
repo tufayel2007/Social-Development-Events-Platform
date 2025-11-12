@@ -13,6 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+console.log(import.meta.env.VITE_FIREBASE_API_KEY);
 
 export { auth, onAuthStateChanged };
 export default { app, auth };

@@ -27,9 +27,9 @@ const UpdateEvent = () => {
   const { data: eventData, isLoading: queryLoading } = useQuery({
     queryKey: ["event", id],
     queryFn: async () => {
-      if (!id) throw new Error("ইভেন্ট ID পাওয়া যায়নি");
+      if (!id) throw new Error("ইভেন্ট ID পাওয়া যায়নি");
       const res = await fetch(`${API_URL}/api/events/${id}`);
-      if (!res.ok) throw new Error("ইভেন্ট ডেটা ফেচ করা যায়নি");
+      if (!res.ok) throw new Error("ইভেন্ট ডেটা ফেচ করা যায়নি");
       return res.json();
     },
     enabled: !!id,
@@ -43,7 +43,6 @@ const UpdateEvent = () => {
         eventType: eventData.eventType || "",
         thumbnail: eventData.thumbnail || "",
         location: eventData.location || "",
-
         eventDate: eventData.eventDate ? new Date(eventData.eventDate) : null,
       });
       setInitialLoading(false);
@@ -111,7 +110,7 @@ const UpdateEvent = () => {
     };
 
     if (updatedData.thumbnail) {
-      updatedData.thumbnail = updatedData.thumbnail;
+      // updatedData.thumbnail = updatedData.thumbnail;
       delete updatedData.thumbnail;
     }
 
@@ -147,6 +146,9 @@ const UpdateEvent = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const inputStyle =
+    "w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-600 focus:ring-4 focus:ring-green-100 focus:outline-none text-lg text-gray-800 placeholder-gray-500 transition duration-300";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 px-4">
       <div className="max-w-4xl mx-auto">
@@ -166,7 +168,7 @@ const UpdateEvent = () => {
               placeholder="ইভেন্টের নাম *"
               value={formData.title}
               onChange={(e) => handleChange("title")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
+              className={inputStyle}
               required
             />
 
@@ -175,17 +177,19 @@ const UpdateEvent = () => {
               rows="5"
               value={formData.description}
               onChange={(e) => handleChange("description")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg resize-none"
+              className={`${inputStyle} resize-none`}
               required
             />
 
             <select
               value={formData.eventType}
               onChange={(e) => handleChange("eventType")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
+              className={inputStyle}
               required
             >
-              <option value="">-- ইভেন্টের ধরন বাছাই করুন --</option>
+              <option value="" disabled>
+                -- ইভেন্টের ধরন বাছাই করুন --
+              </option>
               <option value="Education">শিক্ষা</option>
               <option value="Cleanup">পরিচ্ছন্নতা অভিযান</option>
               <option value="Plantation">গাছ লাগানো</option>
@@ -197,7 +201,7 @@ const UpdateEvent = () => {
               placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
               value={formData.thumbnail}
               onChange={(e) => handleChange("thumbnail")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
+              className={inputStyle}
               required
             />
 
@@ -206,7 +210,7 @@ const UpdateEvent = () => {
               placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
               value={formData.location}
               onChange={(e) => handleChange("location")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
+              className={inputStyle}
               required
             />
 
@@ -218,14 +222,14 @@ const UpdateEvent = () => {
               dateFormat="dd MMMM, yyyy - h:mm aa"
               minDate={new Date()}
               placeholderText="তারিখ ও সময় বাছাই করুন *"
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
+              className={inputStyle}
               required
             />
 
             <button
               type="submit"
               disabled={loading}
-              className={`w-full px-6 py-4 bg-blue-600 text-white text-lg font-bold rounded-xl hover:bg-blue-700 transition transform hover:scale-105 ${
+              className={`w-full px-6 py-4 bg-green-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-[1.01] ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >

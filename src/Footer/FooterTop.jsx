@@ -13,7 +13,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-// সমস্ত লুসিড আইকন प्रॉप্স হিসেবে Footer.jsx থেকে আসবে
 const FooterTop = ({
   email,
   setEmail,
@@ -23,7 +22,7 @@ const FooterTop = ({
   certifications,
 }) => {
   return (
-    <div className="pb-10 border-b border-[#3c3e59] flex flex-col lg:flex-row justify-between items-start gap-12">
+    <div className="pb-10 border-b border-gray-700 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-start gap-12">
       {/* 1. লোগো এবং ব্র্যান্ডিং */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
@@ -101,7 +100,7 @@ const FooterTop = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gradient-to-r from-[#2d2f45] to-[#3c3e59] border border-gray-600 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30 transition-all"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-gradient-to-r from-gray-800 to-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/30 transition-all"
               aria-label="Email for newsletter"
             />
           </div>

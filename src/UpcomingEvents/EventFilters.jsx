@@ -32,13 +32,9 @@ const EventFilters = ({
             <input
               type="text"
               placeholder="ইভেন্ট খুঁজুন..."
-              // এখানে setSearchTerm ফাংশনটি prop থেকে আসছে (যা Debounced)
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-10 py-4 text-base rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-emerald-500 dark:focus:border-emerald-400 outline-none transition-all bg-transparent text-gray-800 dark:text-gray-100"
             />
-            {/* আপনার আগের কোডটিতে searchTerm prop ব্যবহার করা হয়নি, তাই X বাটনটি কাজ করছিল না।
-                এখানে আমি সহজ করার জন্য value prop টি বাদ দিলাম, কারণ setSearchTerm prop টি debounced.
-                যদি আপনি value prop ব্যবহার করতে চান, তবে আপনাকে এটি UpcomingEvents.jsx এ state হিসেবে রাখতে হবে। */}
           </div>
 
           <div className="relative">

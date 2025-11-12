@@ -28,7 +28,7 @@ const FooterMiddle = ({
             <div className="md:hidden">
               <button
                 onClick={() => setOpenSection(openSection === i ? null : i)}
-                className="flex justify-between items-center w-full text-left font-bold text-green-400 pb-2 border-b border-gray-700"
+                className="flex justify-between items-center w-full text-left font-bold text-green-400 pb-2 border-b border-gray-700 dark:border-gray-600"
               >
                 <span className="flex items-center gap-2">
                   {column.icon} {column.title}
@@ -106,7 +106,7 @@ const FooterMiddle = ({
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.5 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-[#3c3e59]"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8 border-t border-gray-700 dark:border-gray-600"
       >
         {quickInfo.map((info, i) => {
           const Icon = info.icon;
