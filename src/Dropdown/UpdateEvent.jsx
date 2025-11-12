@@ -98,7 +98,7 @@ const UpdateEvent = () => {
       return;
     }
     if (eventDate <= new Date()) {
-      Swal.fire("Error", "ইভেন্টের তারিখ ভবিষ্যতে হতে হবে!", "error");
+      Swal.fire("Error", "ইভেন্টের তারিখ ভবিষ্যতে হতে", "error");
       return;
     }
 
