@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-vars */
-// src/pages/UpcomingEvents/UpcomingEvents.jsx
+
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster } from "react-hot-toast";
 
-// ✅ সব প্রয়োজনীয় কম্পোনেন্ট ইম্পোর্ট করুন
-import FullPageLoader from "../UpcomingEvents/FullPageLoader"; // অথবা সঠিক পাথ অনুযায়ী
+import FullPageLoader from "../UpcomingEvents/FullPageLoader";
 import EventFilters from "./EventFilters";
-import EventGrid from "./EventGrid"; // ✅ সঠিক ইম্পোর্ট
-import { useEvents } from "../UpcomingEvents/useEvents"; // ✅ সঠিক ইম্পোর্ট
+import EventGrid from "./EventGrid";
+import { useEvents } from "../UpcomingEvents/useEvents";
 
 const UpcomingEvents = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,28 +17,24 @@ const UpcomingEvents = () => {
     () => localStorage.getItem("darkMode") === "true"
   );
 
-  // Debounce logic যাতে টাইপ করার সময় কম API কল হয়
   const debouncedSearch = useMemo(() => {
     let timeout;
     return (value) => {
       clearTimeout(timeout);
-      setCurrentPage(1); // সার্চ শুরু হলে প্রথম পেজে চলে যাবে
+      setCurrentPage(1);
       timeout = setTimeout(() => setSearchTerm(value), 400);
     };
   }, []);
 
-  // কাস্টম হুক ব্যবহার
   const { allEvents, loading, initialLoad, totalPages, getPaginatedEvents } =
     useEvents(searchTerm, selectedType);
   const paginatedEvents = getPaginatedEvents(currentPage);
 
-  // ডার্ক মোড লজিক
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
-  // যখন ফিল্টার (টাইপ) পরিবর্তন হবে, তখন প্রথম পেজে চলে যাবে
   const handleTypeChange = (value) => {
     setSelectedType(value);
     setCurrentPage(1);
@@ -67,10 +62,10 @@ const UpcomingEvents = () => {
           </motion.div>
 
           <EventFilters
-            searchTerm={searchTerm} // এখানেsearchTerm state না পাঠিয়ে, debounced function পাঠাচ্ছি
+            searchTerm={searchTerm}
             setSearchTerm={debouncedSearch}
             selectedType={selectedType}
-            setSelectedType={handleTypeChange} // নতুন হ্যান্ডলার ব্যবহার
+            setSelectedType={handleTypeChange}
             darkMode={darkMode}
             setDarkMode={setDarkMode}
           />

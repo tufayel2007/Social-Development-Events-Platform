@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* src/components/home/FeaturesSection.jsx */
+
 import React from "react";
 import { motion } from "framer-motion";
 import {
@@ -140,7 +140,6 @@ const FeaturesSection = () => {
                 whileHover={{ y: -12, scale: 1.05 }}
                 className="group relative bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200 dark:border-gray-700 overflow-hidden cursor-pointer"
               >
-                {/* Gradient Overlay */}
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                 />
@@ -161,7 +160,6 @@ const FeaturesSection = () => {
                   </p>
                 </div>
 
-                {/* Hover Glow */}
                 <motion.div
                   className="absolute inset-0 rounded-3xl bg-emerald-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity"
                   animate={{ scale: [1, 1.2, 1] }}

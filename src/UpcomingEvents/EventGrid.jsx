@@ -1,17 +1,15 @@
 /* eslint-disable no-unused-vars */
-// src/pages/UpcomingEvents/components/EventGrid.jsx
-import React from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
-// ✅ সঠিক কম্পোনেন্ট ইম্পোর্ট: EventCardUpcaming ব্যবহার করুন
+
 import EventCardUpcaming from "./EventCardUpcaming";
 import ShimmerLoader from "./ShimmerLoader";
-// ✅ প্রয়োজনীয় আইকনগুলো ইম্পোর্ট করুন
+
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 
-// প্যাগিনেশন কম্পোনেন্ট
 const Pagination = ({ currentPage, totalPages, goToPage }) => {
   const pages = [];
-  // উন্নত প্যাগিনেশন লজিক (৫টি পর্যন্ত পেজ দেখাবে)
+
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -102,14 +100,12 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
   return (
     <>
       <motion.div
-        key={currentPage} // পেজ পরিবর্তন হলে অ্যানিমেশন ট্রিগার করার জন্য key
-        initial={{ opacity: 0, y: 20 }}
+        key={currentPage}
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <AnimatePresence mode="wait">
           {events.map((event, i) => (
-            // ✅ EventCardUpcaming কম্পোনেন্টটি ব্যবহার করা হয়েছে
             <EventCardUpcaming key={event._id} event={event} index={i} />
           ))}
         </AnimatePresence>

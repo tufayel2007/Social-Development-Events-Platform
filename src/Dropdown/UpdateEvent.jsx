@@ -1,29 +1,29 @@
+/* eslint-disable no-self-assign */
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // useParams ইভেন্ট ID ধরার জন্য
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
-import { useQuery } from "@tanstack/react-query"; // ডেটা ফেচ করার জন্য
+import { useQuery } from "@tanstack/react-query";
 
 const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const UpdateEvent = () => {
-  const { id } = useParams(); // URL থেকে Event ID ধরবে
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     eventType: "",
-    thumbnail: "", // CreateEvent-এ 'thumbnail' ছিল, কিন্তু সার্ভারে 'thumbnail' তাই এখানেও ঠিক করা হলো
+    thumbnail: "",
     location: "",
     eventDate: null,
   });
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // 1. পুরনো ইভেন্ট ডেটা ফেচ করা
   const { data: eventData, isLoading: queryLoading } = useQuery({
     queryKey: ["event", id],
     queryFn: async () => {
@@ -35,7 +35,6 @@ const UpdateEvent = () => {
     enabled: !!id,
   });
 
-  // 2. ডেটা ফর্মে লোড করা
   useEffect(() => {
     if (eventData && !queryLoading) {
       setFormData({
@@ -44,14 +43,13 @@ const UpdateEvent = () => {
         eventType: eventData.eventType || "",
         thumbnail: eventData.thumbnail || "",
         location: eventData.location || "",
-        // ডেটাবেজ থেকে আসা স্ট্রিংটিকে Date অবজেক্টে রূপান্তর করা হলো
+
         eventDate: eventData.eventDate ? new Date(eventData.eventDate) : null,
       });
       setInitialLoading(false);
     }
   }, [eventData, queryLoading]);
 
-  // লগইন চেক ও প্রাথমিক লোডিং স্ক্রিন
   if (!auth.currentUser || initialLoading || queryLoading) {
     if (!auth.currentUser) {
       navigate("/login");
@@ -64,13 +62,11 @@ const UpdateEvent = () => {
     );
   }
 
-  // ইমেইল বের করা
   let creatorEmail = auth.currentUser.email;
   if (!creatorEmail && auth.currentUser.providerData?.length > 0) {
     creatorEmail = auth.currentUser.providerData[0].email;
   }
 
-  // যদি ইউজার ইভেন্টের creator না হয়
   if (eventData.creatorEmail !== creatorEmail) {
     Swal.fire({
       icon: "error",
@@ -80,7 +76,6 @@ const UpdateEvent = () => {
     return null;
   }
 
-  // 3. ফর্ম সাবমিট হ্যান্ডেল করা
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!creatorEmail) {
@@ -91,7 +86,6 @@ const UpdateEvent = () => {
     const { title, description, eventType, thumbnail, location, eventDate } =
       formData;
 
-    // validation
     if (
       !title ||
       !description ||
@@ -112,11 +106,10 @@ const UpdateEvent = () => {
       ...formData,
       thumbnail: thumbnail.trim(),
       location: location.trim(),
-      eventDate: eventDate.toISOString(), // ISO স্ট্রিং আকারে পাঠানো
-      creatorEmail: creatorEmail, // সার্ভারকে চেক করার জন্য creatorEmail পাঠানো হলো
+      eventDate: eventDate.toISOString(),
+      creatorEmail: creatorEmail,
     };
 
-    // CreateEvent-এ formData.thumbnail ছিল, কিন্তু সার্ভারে thumbnail - তাই এখানেও ঠিক করা হলো
     if (updatedData.thumbnail) {
       updatedData.thumbnail = updatedData.thumbnail;
       delete updatedData.thumbnail;
@@ -126,7 +119,7 @@ const UpdateEvent = () => {
 
     try {
       const res = await fetch(`${API_URL}/api/events/${id}`, {
-        method: "PATCH", // 💡 PATCH রিকোয়েস্ট
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
@@ -142,7 +135,6 @@ const UpdateEvent = () => {
         timer: 1500,
       });
 
-      // ManageEvents এ ফিরে যাওয়া ও রিফ্রেশ করা
       navigate("/ManageEvents", { state: { refresh: true } });
     } catch (err) {
       Swal.fire("Error", err.message, "error");
@@ -151,7 +143,6 @@ const UpdateEvent = () => {
     }
   };
 
-  // ফর্ম ইনপুট হ্যান্ডলার
   const handleChange = (field) => (value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -204,7 +195,7 @@ const UpdateEvent = () => {
             <input
               type="url"
               placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
-              value={formData.thumbnail} // সার্ভারের সঙ্গে মিল রেখে thumbnail ব্যবহার করা হলো
+              value={formData.thumbnail}
               onChange={(e) => handleChange("thumbnail")(e.target.value)}
               className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg"
               required

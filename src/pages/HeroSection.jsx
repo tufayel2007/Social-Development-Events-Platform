@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* src/components/home/HeroSection.jsx */
+
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -12,7 +12,6 @@ const HeroSection = ({ timeLeft, scrollYProgress }) => {
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Parallax Background */}
       <motion.div
         style={{ scale: scaleProgress, opacity: opacityProgress }}
         className="absolute inset-0"
@@ -25,7 +24,6 @@ const HeroSection = ({ timeLeft, scrollYProgress }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
       </motion.div>
 
-      {/* Floating Elements */}
       <motion.div
         animate={{ y: [0, -15, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -41,7 +39,6 @@ const HeroSection = ({ timeLeft, scrollYProgress }) => {
         <Users className="w-20 h-20" />
       </motion.div>
 
-      {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -83,7 +80,6 @@ const HeroSection = ({ timeLeft, scrollYProgress }) => {
         </motion.div>
       </div>
 
-      {/* Live Ticker + Countdown */}
       <motion.div
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

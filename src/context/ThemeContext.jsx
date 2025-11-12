@@ -1,11 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
-// src/context/ThemeContext.jsx
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const ThemeContext = createContext();
 
-// Named export
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
@@ -28,6 +26,3 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-// default export (যদি অন্য কোথাও দরকার হয়)
-// export default ThemeProvider;
