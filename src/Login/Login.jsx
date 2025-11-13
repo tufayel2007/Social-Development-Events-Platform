@@ -228,7 +228,7 @@ const Login = () => {
           </button>
         </div>
 
-        {/* Register Link */}
+        {/* Register*/}
         <p className="text-center mt-8 text-base-content/70">
           New here?{" "}
           <Link to="/register" className="link link-primary font-bold">
