@@ -71,8 +71,9 @@ const Navbar = () => {
 
   return (
     <div
-      className="navbar bg-base-100 text-base-content
-     shadow-md sticky top-0 z-50 transition-colors duration-300"
+      className="navbar bg-base-100 text-base-content shadow-md 
+               fixed top-0 left-0 right-0 z-50 
+               transition-colors duration-300 h-16"
     >
       <div className="navbar-start">
         <div className="dropdown">
