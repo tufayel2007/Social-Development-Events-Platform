@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* src/components/home/GallerySection.jsx */
 import React, { useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView as useInViewObserver } from "react-intersection-observer";
 import { ZoomIn, X, Sparkles } from "lucide-react";
 
@@ -35,7 +35,7 @@ const GallerySection = () => {
   return (
     <section
       ref={ref}
-      className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-emerald-50 dark:from-gray-800 dark:to-gray-900"
+      className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-base-200"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -46,15 +46,17 @@ const GallerySection = () => {
           <motion.div
             initial={{ scale: 0 }}
             animate={inView ? { scale: 1 } : {}}
-            transition={{ type: "spring", stiffness: 200 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4"
+            transition={{
+              type: "spring",
+              stiffness: 200,
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-semibold mb-4"
           >
-            <Sparkles className="w-4 h-4" />
-            স্মৃতির ঝলক
+            <Sparkles className="w-4 h-4" /> স্মৃতির ঝলক
           </motion.div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-800 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-base-content">
             আমাদের{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
               স্মৃতিচারণ
             </span>
           </h2>
@@ -93,6 +95,7 @@ const GallerySection = () => {
           ))}
         </motion.div>
 
+        {/* Modal/Lightbox */}
         {selected && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -102,10 +105,8 @@ const GallerySection = () => {
             className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
           >
             <motion.img
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
               src={selected}
-              alt="Zoomed"
+              alt="Selected"
               className="max-w-full max-h-full rounded-xl shadow-2xl"
             />
             <button

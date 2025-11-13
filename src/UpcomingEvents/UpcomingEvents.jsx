@@ -13,9 +13,6 @@ const UpcomingEvents = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("darkMode") === "true"
-  );
 
   const debouncedSearch = useMemo(() => {
     let timeout;
@@ -29,11 +26,6 @@ const UpcomingEvents = () => {
   const { allEvents, loading, initialLoad, totalPages, getPaginatedEvents } =
     useEvents(searchTerm, selectedType);
   const paginatedEvents = getPaginatedEvents(currentPage);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
 
   const handleTypeChange = (value) => {
     setSelectedType(value);
@@ -66,8 +58,6 @@ const UpcomingEvents = () => {
             setSearchTerm={debouncedSearch}
             selectedType={selectedType}
             setSelectedType={handleTypeChange}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
           />
 
           <EventGrid

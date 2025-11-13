@@ -12,7 +12,6 @@ import {
   Moon,
 } from "lucide-react";
 
-// ডেমো FAQ ডেটা
 const faqData = [
   {
     category: "Authentication",
@@ -61,7 +60,6 @@ const faqData = [
   },
 ];
 
-// ছোট কম্পোনেন্ট: প্রতিটি FAQ আইটেম
 const AccordionItem = ({ question, isOpen, onClick }) => {
   return (
     <motion.div
@@ -102,7 +100,6 @@ const AccordionItem = ({ question, isOpen, onClick }) => {
   );
 };
 
-// কাস্টম অ্যানিমেটেড সাকসেস মডাল
 const SuccessModal = ({ setIsSubmitted }) => (
   <motion.div
     initial={{ opacity: 0 }}
@@ -110,13 +107,11 @@ const SuccessModal = ({ setIsSubmitted }) => (
     exit={{ opacity: 0 }}
     className="fixed inset-0 z-50 flex items-center justify-center p-4"
   >
-    {/* Backdrop */}
     <div
       className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       onClick={() => setIsSubmitted(false)}
     ></div>
 
-    {/* Modal Content */}
     <motion.div
       initial={{ scale: 0.7, y: 50 }}
       animate={{ scale: 1, y: 0 }}
@@ -125,7 +120,6 @@ const SuccessModal = ({ setIsSubmitted }) => (
       className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full relative transform overflow-hidden border-4 border-emerald-500 dark:border-emerald-400"
     >
       <div className="text-center">
-        {/* Animated Icon */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: 360 }}
@@ -139,7 +133,6 @@ const SuccessModal = ({ setIsSubmitted }) => (
           <Zap className="w-8 h-8 text-emerald-600 dark:text-emerald-300" />
         </motion.div>
 
-        {/* Text Content */}
         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           সফলভাবে পাঠানো হয়েছে!
         </h3>
@@ -148,7 +141,6 @@ const SuccessModal = ({ setIsSubmitted }) => (
           করব।
         </p>
 
-        {/* Close Button */}
         <button
           onClick={() => setIsSubmitted(false)}
           className="w-full py-2 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors"

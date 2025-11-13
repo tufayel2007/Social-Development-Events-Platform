@@ -40,8 +40,6 @@ import {
   Copy,
   ExternalLink,
 } from "lucide-react";
-
-// ইম্পোর্ট করা সাব-কম্পোনেন্ট
 import FooterTop from "./FooterTop";
 import FooterMiddle from "./FooterMiddle";
 import FooterBottom from "./FooterBottom";
@@ -196,13 +194,11 @@ const Footer = () => {
 
   return (
     <>
-      {/* টোস্টার নোটিফিকেশন */}
       <Toaster
         position="top-center"
         toastOptions={{ className: "font-medium" }}
       />
 
-      {/* স্ক্রল টু টপ বাটন */}
       <AnimatePresence>
         {scrolled && (
           <motion.button
@@ -218,7 +214,6 @@ const Footer = () => {
         )}
       </AnimatePresence>
 
-      {/* লাইভ চ্যাট বাটন */}
       <motion.button
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -229,7 +224,6 @@ const Footer = () => {
         <MessageCircle size={24} />
       </motion.button>
 
-      {/* মূল ফুটার কম্পোনেন্ট */}
       <footer
         className={`bg-gradient-to-b from-[#0f172a] via-[#1a1c2e] to-[#24263b] text-white pt-16 pb-8 ${
           darkMode ? "dark" : ""
@@ -237,7 +231,6 @@ const Footer = () => {
         id="footer"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* প্রোমোশন ব্যানার */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}

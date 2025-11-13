@@ -90,7 +90,7 @@ const FAQSection = () => {
   return (
     <section
       ref={ref}
-      className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800"
+      className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-base-100"
     >
       <div className="max-w-5xl mx-auto">
         {/* Header */}
