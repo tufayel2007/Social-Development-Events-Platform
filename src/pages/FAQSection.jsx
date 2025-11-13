@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* src/components/home/FAQSection.jsx */
+
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -65,7 +65,6 @@ const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  // Filter FAQs
   const filteredFAQs = useMemo(() => {
     return faqs.filter((faq) => {
       const matchesSearch =
@@ -93,7 +92,6 @@ const FAQSection = () => {
       className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-base-100"
     >
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -120,14 +118,12 @@ const FAQSection = () => {
           </p>
         </motion.div>
 
-        {/* Search + Category Filter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3 }}
           className="mb-10"
         >
-          {/* Search */}
           <div className="relative mb-6">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -139,7 +135,6 @@ const FAQSection = () => {
             />
           </div>
 
-          {/* Category Tabs */}
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map((cat) => {
               const Icon = cat.icon;
@@ -161,7 +156,6 @@ const FAQSection = () => {
           </div>
         </motion.div>
 
-        {/* FAQ List */}
         <div className="space-y-4">
           <AnimatePresence>
             {filteredFAQs.map((faq, i) => (
@@ -178,7 +172,6 @@ const FAQSection = () => {
                   onClick={() => toggleFAQ(i)}
                   className="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700"
                 >
-                  {/* Question Header */}
                   <div className="flex justify-between items-center p-5">
                     <div className="flex-1">
                       <h3 className="font-bold text-lg text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
@@ -199,7 +192,6 @@ const FAQSection = () => {
                     </div>
                   </div>
 
-                  {/* Answer */}
                   <AnimatePresence>
                     {openIndex === i && (
                       <motion.div
@@ -252,7 +244,6 @@ const FAQSection = () => {
           )}
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -10,16 +9,18 @@ import { toast, Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
 import { useInView } from "react-intersection-observer";
-
 import { FiEdit3, FiEye, FiTrash2, FiRefreshCw, FiPlus } from "react-icons/fi";
+import { useTheme } from "../context/ThemeContext";
 
 const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const ManageEvents = () => {
   const { user, loading: authLoading } = useAuth();
+  const { mode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("date");
   const [filterType, setFilterType] = useState("");
@@ -55,7 +56,7 @@ const ManageEvents = () => {
     },
     enabled: !!userEmail,
     retry: 2,
-    staleTime: 1000 * 10,
+    staleTime: 10000,
   });
 
   const deleteMutation = useMutation({
@@ -87,8 +88,8 @@ const ManageEvents = () => {
       text: "এটা আর ফিরে পাবেন না!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#3b82f6",
       confirmButtonText: "হ্যাঁ, মুছে ফেলো!",
       cancelButtonText: "না",
     }).then((result) => {
@@ -119,18 +120,22 @@ const ManageEvents = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-teal-900 py-16 px-4 transition-colors">
-      <Toaster position="top-right" />
+    <div className="min-h-screen bg-base-100 py-16 px-4">
+      <Toaster
+        position="top-right"
+        toastOptions={{ className: "font-medium" }}
+      />
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-green-700 dark:text-green-400 mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-4">
             আমার তৈরি করা ইভেন্টসমূহ
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-xl text-base-content/70">
             আপনার সৃষ্টি পরিচালনা করুন
           </p>
         </motion.div>
@@ -147,12 +152,12 @@ const ManageEvents = () => {
               placeholder="ইভেন্টের নাম দিয়ে খুঁজুন..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-96 px-6 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-green-500 dark:bg-gray-800 dark:text-white transition-all shadow-sm hover:shadow-md"
+              className="input input-bordered w-full md:w-96 text-lg"
             />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full md:w-48 px-6 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-green-500 dark:bg-gray-800 dark:text-white"
+              className="select select-bordered w-full md:w-48 text-lg"
             >
               <option value="date">তারিখ অনুযায়ী</option>
               <option value="title">নাম অনুযায়ী</option>
@@ -160,31 +165,31 @@ const ManageEvents = () => {
             </select>
           </div>
 
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-2 justify-center">
             {["", "Cleanup", "Plantation", "Donation", "Education"].map(
               (type) => (
                 <button
                   key={type}
                   onClick={() => setFilterType(type)}
-                  className={`px-5 py-2 rounded-full text-sm font-medium transition ${
-                    filterType === type
-                      ? "bg-green-600 text-white shadow-lg"
-                      : "bg-gray-200 dark:bg-gray-700 hover:bg-green-100 dark:hover:bg-green-900"
+                  className={`badge badge-lg ${
+                    filterType === type ? "badge-primary" : "badge-ghost"
                   }`}
                 >
                   {type || "সব"}
                 </button>
               )
             )}
+
             <button
               onClick={() => refetch()}
-              className="px-6 py-2 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg flex items-center gap-2"
+              className="btn btn-outline btn-sm gap-1"
             >
               <FiRefreshCw /> Refresh
             </button>
+
             <button
               onClick={() => navigate("/CreateEvent")}
-              className="px-6 py-2 bg-green-600 text-white rounded-full font-bold hover:bg-green-700 transition transform hover:scale-105 shadow-lg flex items-center gap-2"
+              className="btn btn-primary btn-sm gap-1"
             >
               <FiPlus /> New Event
             </button>
@@ -192,15 +197,14 @@ const ManageEvents = () => {
         </motion.div>
 
         {isError && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-6 py-4 rounded-2xl mb-8 text-center shadow-lg"
-          >
-            <strong>এরর:</strong> {error?.message}
-          </motion.div>
+          <div className="alert alert-error shadow-lg mb-8">
+            <div>
+              <strong>এরর:</strong> {error?.message}
+            </div>
+          </div>
         )}
 
+        {/*  State */}
         {filteredEvents.length === 0 && !isLoading && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -210,16 +214,16 @@ const ManageEvents = () => {
             <img
               src="https://i.ibb.co.com/0jZ8g7h/empty-events.png"
               alt="No events"
-              className="mx-auto w-64 mb-8 opacity-80"
+              className="mx-auto w-64 mb-8 opacity-70"
             />
-            <p className="text-3xl font-bold text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-3xl font-bold text-base-content/70 mb-6">
               {searchTerm || filterType
                 ? "কোনো মিল পাওয়া যায়নি"
                 : "আপনি এখনো কোনো ইভেন্ট তৈরি করেননি"}
             </p>
             <button
               onClick={() => navigate("/CreateEvent")}
-              className="px-10 py-4 bg-green-600 text-white font-bold rounded-2xl hover:bg-green-700 transition transform hover:scale-110 shadow-xl flex items-center gap-2 mx-auto"
+              className="btn btn-primary gap-2"
             >
               <FiPlus /> First Event
             </button>
@@ -251,7 +255,7 @@ const ManageEvents = () => {
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="fixed bottom-8 right-8 p-4 bg-green-600 text-white rounded-full shadow-2xl z-50 hover:scale-110 transition"
+        className="fixed bottom-8 right-8 btn btn-circle btn-primary shadow-2xl z-50"
       >
         Up
       </button>
@@ -273,9 +277,9 @@ const EventCard = React.memo(
         animate={inView ? { opacity: 1, y: 0 } : {}}
         whileHover={{ y: -8, scale: 1.03 }}
         transition={{ duration: 0.5, delay: index * 0.08 }}
-        className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300"
+        className="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
       >
-        <div className="relative overflow-hidden">
+        <figure className="relative overflow-hidden">
           <img
             src={
               event.thumbnail ||
@@ -287,26 +291,24 @@ const EventCard = React.memo(
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute top-3 left-3 flex gap-2">
-            <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs font-bold">
-              {event.eventType}
-            </span>
+            <div className="badge badge-primary">{event.eventType}</div>
             {daysLeft > 0 && daysLeft <= 7 && (
-              <span className="px-3 py-1 bg-red-500 text-white rounded-full text-xs font-bold animate-pulse">
+              <div className="badge badge-error animate-pulse">
                 {daysLeft} দিন
-              </span>
+              </div>
             )}
           </div>
-        </div>
+        </figure>
 
-        <div className="p-5 space-y-3">
-          <h3 className="text-lg font-bold text-green-700 dark:text-green-400 line-clamp-1">
+        <div className="card-body p-5 space-y-3">
+          <h3 className="card-title text-primary line-clamp-1">
             {event.title}
           </h3>
-          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+          <p className="text-base-content/70 text-sm line-clamp-2">
             {event.description}
           </p>
 
-          <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+          <div className="text-xs text-base-content/60 space-y-1">
             <p>Location: {event.location}</p>
             <p>
               Date:{" "}
@@ -314,38 +316,38 @@ const EventCard = React.memo(
                 locale: bn,
               })}
             </p>
-            <p className="text-green-600 dark:text-green-400 font-medium">
+            <p className="text-success font-medium">
               {event.joinedUsers?.length || 0} জন
             </p>
           </div>
 
-          <div className="flex gap-2 pt-3">
+          <div className="card-actions justify-between pt-3">
             <button
-              disabled
               onClick={() => window.open(`/event/${event._id}`, "_blank")}
-              className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition flex items-center justify-center gap-1 group"
+              className="btn btn-info btn-sm gap-1"
               title="ইভেন্ট দেখুন"
             >
-              <FiEye className="group-hover:scale-110 transition" /> View
+              <FiEye /> View
             </button>
 
             <button
               onClick={() => navigate(`/updateEvent/${event._id}`)}
-              className="flex-1 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition flex items-center justify-center gap-1 group shadow-md hover:shadow-lg"
+              className="btn btn-success btn-sm gap-1"
               title="ইভেন্ট আপডেট করুন"
             >
-              <FiEdit3 className="group-hover:rotate-12 transition" /> Edit
+              <FiEdit3 /> Edit
             </button>
 
-            {/* Delete */}
             <button
               onClick={() => onDelete(event._id, event.title)}
               disabled={isDeleting}
-              className="px-3 py-2.5 bg-red-600 text-white text-sm font-bold rounded-xl hover:bg-red-700 disabled:opacity-50 transition flex items-center justify-center group"
+              className="btn btn-error btn-sm"
               title="ইভেন্ট মুছে ফেলুন"
             >
-              <FiTrash2 className="group-hover:scale-110 transition" />
-              {isDeleting ? "..." : ""}
+              <FiTrash2 />
+              {isDeleting && (
+                <span className="loading loading-spinner loading-xs"></span>
+              )}
             </button>
           </div>
         </div>
@@ -355,22 +357,19 @@ const EventCard = React.memo(
 );
 
 const SkeletonGrid = () => (
-  <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 dark:from-gray-900 dark:to-teal-900 flex items-center justify-center p-4">
+  <div className="min-h-screen bg-base-100 flex items-center justify-center p-4">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full max-w-7xl">
       {[...Array(8)].map((_, i) => (
-        <div
-          key={i}
-          className="bg-white/80 dark:bg-gray-800/80 rounded-3xl shadow-xl animate-pulse"
-        >
-          <div className="h-48 bg-gray-300 dark:bg-gray-700 rounded-t-3xl"></div>
-          <div className="p-5 space-y-3">
-            <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
+        <div key={i} className="card bg-base-200 shadow-xl animate-pulse">
+          <div className="h-48 bg-base-300 rounded-t-xl"></div>
+          <div className="card-body p-5 space-y-3">
+            <div className="h-5 bg-base-300 rounded w-3/4"></div>
+            <div className="h-4 bg-base-300 rounded w-full"></div>
+            <div className="h-4 bg-base-300 rounded w-5/6"></div>
             <div className="flex gap-2">
-              <div className="flex-1 h-9 bg-gray-300 dark:bg-gray-700 rounded"></div>
-              <div className="flex-1 h-9 bg-gray-300 dark:bg-gray-700 rounded"></div>
-              <div className="w-12 h-9 bg-gray-300 dark:bg-gray-700 rounded"></div>
+              <div className="flex-1 h-9 bg-base-300 rounded"></div>
+              <div className="flex-1 h-9 bg-base-300 rounded"></div>
+              <div className="w-12 h-9 bg-base-300 rounded"></div>
             </div>
           </div>
         </div>

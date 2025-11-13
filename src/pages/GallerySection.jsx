@@ -62,7 +62,6 @@ const GallerySection = () => {
           </h2>
         </motion.div>
 
-        {/* Grid */}
         <motion.div
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
@@ -95,7 +94,6 @@ const GallerySection = () => {
           ))}
         </motion.div>
 
-        {/* Modal/Lightbox */}
         {selected && (
           <motion.div
             initial={{ opacity: 0 }}

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -7,7 +6,6 @@ import { FaSquareGithub, FaApple } from "react-icons/fa6";
 import { Eye, EyeOff, Sparkles, User, Mail, Lock, Camera } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -16,9 +14,11 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "../firebase/FirebaseConfig";
+import { useTheme } from "../context/ThemeContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { mode } = useTheme();
   const [formData, setFormData] = React.useState({
     fullName: "",
     email: "",
@@ -30,7 +30,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [focused, setFocused] = React.useState("");
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -51,11 +50,9 @@ const Register = () => {
 
   const validatePassword = (password) => {
     const errors = [];
-    if (password.length < 6) errors.push("Minimum 6 characters required.");
-    if (!/[A-Z]/.test(password))
-      errors.push("At least one uppercase letter required.");
-    if (!/[a-z]/.test(password))
-      errors.push("At least one lowercase letter required.");
+    if (password.length < 6) errors.push("কমপক্ষে ৬ অক্ষর হতে হবে।");
+    if (!/[A-Z]/.test(password)) errors.push("কমপক্ষে একটি বড় হাতের অক্ষর।");
+    if (!/[a-z]/.test(password)) errors.push("কমপক্ষে একটি ছোট হাতের অক্ষর।");
     return errors;
   };
 
@@ -64,15 +61,15 @@ const Register = () => {
     const { fullName, email, password, confirmPassword, photoURL } = formData;
 
     if (passwordErrors.length > 0) {
-      toast.error("Fix password errors!", { icon: "Warning" });
+      toast.error("পাসওয়ার্ডের সমস্যা ঠিক করুন!", { icon: "Warning" });
       return;
     }
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match!", { icon: "Warning" });
+      toast.error("পাসওয়ার্ড মিলছে না!", { icon: "Warning" });
       return;
     }
     if (!fullName || !email) {
-      toast.error("Name and Email are required!", { icon: "Warning" });
+      toast.error("নাম ও ইমেইল আবশ্যক!", { icon: "Warning" });
       return;
     }
 
@@ -92,15 +89,15 @@ const Register = () => {
           )}&background=0D8ABC&color=fff`,
       });
 
-      toast.success("Account Created!", {
+      toast.success("একাউন্ট তৈরি হয়েছে!", {
         icon: <Sparkles className="text-yellow-400" />,
       });
       setTimeout(() => navigate("/upcomingEvents"), 1500);
     } catch (error) {
       const msg =
         error.code === "auth/email-already-in-use"
-          ? "Email already registered!"
-          : "Registration failed. Try again.";
+          ? "এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট আছে!"
+          : "রেজিস্ট্রেশন ব্যর্থ। আবার চেষ্টা করুন।";
       toast.error(msg, { icon: "Warning" });
     } finally {
       setLoading(false);
@@ -112,222 +109,148 @@ const Register = () => {
     setLoading(true);
     try {
       await signInWithPopup(auth, provider);
-      toast.success("Welcome with Google!", {
-        icon: <FcGoogle size={20} />,
-      });
+      toast.success("Google দিয়ে স্বাগতম!", { icon: <FcGoogle size={20} /> });
       setTimeout(() => navigate("/upcomingEvents"), 1500);
     } catch (error) {
-      toast.error("Google login failed!", { icon: "Warning" });
+      toast.error("Google রেজিস্ট্রেশন ব্যর্থ!", { icon: "Warning" });
     } finally {
       setLoading(false);
     }
   };
 
+  const handleUnavailable = (name) => {
+    toast.info(`${name} শীঘ্রই আসছে!`, { icon: "Leaf", autoClose: 2500 });
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden relative">
-      <ToastContainer position="top-center" theme="light" autoClose={3000} />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-success overflow-hidden relative">
+      <ToastContainer position="top-center" theme={mode} autoClose={3000} />
 
-      <div className="absolute top-10 left-10 w-80 h-80 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
-      <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+      <div className="absolute top-10 left-10 w-80 h-80 bg-primary/30 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+      <div className="absolute bottom-10 right-10 w-72 h-72 bg-success/30 rounded-full blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-info/30 rounded-full blur-3xl opacity-30 animate-pulse animation-delay-4000"></div>
 
-      <div className="relative max-w-md w-full bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 z-10 transform transition-all duration-500 hover:scale-[1.01]">
-        {/* Logo + Title */}
+      <div className="card bg-base-100/90 backdrop-blur-xl shadow-2xl w-full max-w-md p-8 border border-base-300 z-10">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-lg animate-pulse">
-              <User className="text-white text-3xl" />
+            <div className="p-3 bg-gradient-to-r from-primary to-success rounded-full shadow-lg">
+              <User className="text-primary-content text-3xl" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
             Create Account
           </h1>
-          <p className="text-gray-500 mt-2 text-sm">
+          <p className="text-base-content/70 mt-2 text-sm">
             Join us and explore events
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="relative">
+          <div className="form-control relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5" />
             <input
               type="text"
               name="fullName"
-              placeholder="Full Name"
+              placeholder="fuull name "
               value={formData.fullName}
               onChange={handleChange}
-              onFocus={() => setFocused("fullName")}
-              onBlur={() => setFocused("")}
-              className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
-                ${
-                  focused === "fullName"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200 dark:border-gray-600"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30 
-                dark:from-gray-900 dark:to-gray-800
-                placeholder-gray-500 dark:placeholder-gray-400
-                text-gray-900 dark:text-white 
-                font-semibold 
-                placeholder:font-medium`}
+              className="input input-bordered w-full pl-12"
               required
             />
-            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
-
-          <div className="relative">
+          <div className="form-control relative">
+            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5" />
             <input
               type="url"
               name="photoURL"
-              placeholder="Photo URL (Optional)"
+              placeholder="img url"
               value={formData.photoURL}
               onChange={handleChange}
-              onFocus={() => setFocused("photoURL")}
-              onBlur={() => setFocused("")}
-              className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
-                ${
-                  focused === "photoURL"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200 dark:border-gray-600"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30 
-                dark:from-gray-900 dark:to-gray-800
-                placeholder-gray-500 dark:placeholder-gray-400
-                text-gray-900 dark:text-white 
-                font-semibold 
-                placeholder:font-medium`}
+              className="input input-bordered w-full pl-12"
             />
-            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
-
-          <div className="relative">
+          <div className="form-control relative">
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5" />
             <input
               type="email"
               name="email"
-              placeholder="Email Address"
+              placeholder="email aedress"
               value={formData.email}
               onChange={handleChange}
-              onFocus={() => setFocused("email")}
-              onBlur={() => setFocused("")}
-              className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12
-                ${
-                  focused === "email"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200 dark:border-gray-600"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30 
-                dark:from-gray-900 dark:to-gray-800
-                placeholder-gray-500 dark:placeholder-gray-400
-                text-gray-900 dark:text-white 
-                font-semibold 
-                placeholder:font-medium`}
+              className="input input-bordered w-full pl-12"
               required
             />
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
           </div>
-
-          <div className="relative">
+          <div className="form-control relative">
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5" />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Password"
+              placeholder="password"
               value={formData.password}
               onChange={handleChange}
-              onFocus={() => setFocused("password")}
-              onBlur={() => setFocused("")}
-              className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12 pr-14
-                ${
-                  focused === "password"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200 dark:border-gray-600"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30 
-                dark:from-gray-900 dark:to-gray-800
-                placeholder-gray-500 dark:placeholder-gray-400
-                text-gray-900 dark:text-white 
-                font-semibold 
-                placeholder:font-medium`}
+              className="input input-bordered w-full pl-12 pr-12"
               required
             />
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800 transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary transition"
             >
-              {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
-
           {formData.password && (
-            <ul className="text-xs space-y-1 pl-2">
+            <div className="text-xs space-y-1 pl-2">
               {passwordErrors.map((err, i) => (
-                <li key={i} className="text-red-500 flex items-center gap-1">
-                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>{" "}
-                  {err}
-                </li>
+                <div key={i} className="text-error flex items-center gap-1">
+                  <span className="w-1 h-1 bg-error rounded-full"></span> {err}
+                </div>
               ))}
               {passwordErrors.length === 0 && (
-                <li className="text-emerald-600 font-medium flex items-center gap-1">
-                  <Sparkles size={14} /> Strong password!
-                </li>
+                <div className="text-success font-medium flex items-center gap-1">
+                  <Sparkles size={14} /> Strong Pasword!
+                </div>
               )}
-            </ul>
+            </div>
           )}
-
-          <div className="relative">
+          {/************************************ *Confirm Password ****************************/}
+          <div className="form-control relative">
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5" />
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="mske sure password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              onFocus={() => setFocused("confirmPassword")}
-              onBlur={() => setFocused("")}
-              className={`w-full px-5 py-4 rounded-2xl border-2 transition-all duration-300 font-medium pl-12 pr-14
-                ${
-                  focused === "confirmPassword"
-                    ? "border-emerald-500 ring-4 ring-emerald-800"
-                    : "border-gray-200 dark:border-gray-600"
-                }
-                focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-800
-                bg-gradient-to-r from-white to-emerald-50/30 
-                dark:from-gray-900 dark:to-gray-800
-                placeholder-gray-500 dark:placeholder-gray-400
-                text-gray-900 dark:text-white 
-                font-semibold 
-                placeholder:font-medium`}
+              className="input input-bordered w-full pl-12 pr-12"
               required
             />
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500 pointer-events-none" />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800 transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary transition"
             >
-              {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
-
           {formData.confirmPassword && (
             <p
               className={`text-sm font-medium flex items-center gap-1 ${
                 formData.password === formData.confirmPassword
-                  ? "text-emerald-600"
-                  : "text-red-500"
+                  ? "text-success"
+                  : "text-error"
               }`}
             >
               {formData.password === formData.confirmPassword ? (
-                <>Passwords match!</>
+                <>Password is match</>
               ) : (
-                <>Passwords do not match.</>
+                <>Password did not match</>
               )}
             </p>
           )}
-
+          {/************************************ * submit ****************************/}
+          {/* Submit */}{" "}
           <button
             type="submit"
             disabled={
@@ -335,85 +258,78 @@ const Register = () => {
               passwordErrors.length > 0 ||
               formData.password !== formData.confirmPassword
             }
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-4 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className={`btn btn-primary w-full gap-2 ${
+              loading ? "loading" : ""
+            }`}
           >
             {loading ? (
-              <>
-                <span className="loading loading-spinner loading-sm"></span>
-                Creating...
-              </>
+              "তৈরি হচ্ছে..."
             ) : (
               <>
                 <Sparkles size={20} />
-                Register Now
+                Registation
               </>
             )}
           </button>
         </form>
 
         <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-          <span className="px-4 text-sm text-gray-500 font-medium">
+          <div className="flex-1 h-px bg-base-300"></div>
+          <span className="px-4 text-sm text-base-content/60">
             Or continue with
           </span>
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+          <div className="flex-1 h-px bg-base-300"></div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={handleGoogleRegister}
             disabled={loading}
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
-            title="Continue with Google"
+            className="btn btn-outline btn-square"
+            title="Google দিয়ে রেজিস্টার"
           >
-            <FcGoogle size={24} className="group-hover:animate-pulse" />
+            <FcGoogle size={24} />
           </button>
-
           <button
-            onClick={handleGoogleRegister}
+            onClick={() => handleUnavailable("GitHub")}
+            className="btn btn-outline btn-square"
             disabled
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
-            title="Continue with Google"
           >
-            <FaSquareGithub size={24} className="group-hover:animate-pulse" />
+            <FaSquareGithub size={24} />
           </button>
-
           <button
+            onClick={() => handleUnavailable("Apple")}
+            className="btn btn-outline btn-square"
             disabled
-            onClick={handleGoogleRegister}
-            className="group p-3 rounded-2xl bg-white shadow-md hover:shadow-xl transform hover:scale-110 active:scale-95 transition-all duration-300 border border-gray-200 flex items-center justify-center cursor-pointer"
-            title="Continue with Google"
           >
-            <FaApple size={24} className="group-hover:animate-pulse" />
+            <FaApple size={24} />
           </button>
         </div>
+        {/************************************ * login Link ****************************/}
 
-        <p className="text-center mt-8 text-gray-600">
-          Have an account?
-          <Link
-            to="/login"
-            className="font-bold text-emerald-600 hover:text-emerald-800 hover:underline transition"
-          >
-            Login here
+        <p className="text-center mt-8 text-base-content/70">
+          Have a Account
+          <Link to="/login" className="link link-primary font-bold">
+            Login Now !
           </Link>
         </p>
       </div>
 
+      {/************************************ * Animation ****************************/}
       <style jsx>{`
-        @keyframes blob {
+        @keyframes pulse {
           0%,
           100% {
-            transform: translate(0px, 0px) scale(1);
+            opacity: 0.4;
+            transform: scale(1);
           }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
+          50% {
+            opacity: 0.6;
+            transform: scale(1.05);
           }
         }
-        .animate-blob {
-          animation: blob 7s infinite;
+        .animate-pulse {
+          animation: pulse 4s infinite;
         }
         .animation-delay-2000 {
           animation-delay: 2s;

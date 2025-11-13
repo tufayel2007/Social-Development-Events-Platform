@@ -1,14 +1,17 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { auth } from "../firebase/FirebaseConfig";
+import { useTheme } from "../context/ThemeContext";
 
 const API_URL = "https://social-development-events-platform-brown.vercel.app";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
+  const { mode } = useTheme();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -19,6 +22,8 @@ const CreateEvent = () => {
     eventDate: null,
   });
   const [loading, setLoading] = useState(false);
+
+  // ******************************* Auth Check ****************
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!auth.currentUser) {
@@ -29,7 +34,6 @@ const CreateEvent = () => {
         }).then(() => navigate("/login"));
       }
     }, 1000);
-
     return () => clearTimeout(timer);
   }, [navigate]);
 
@@ -76,11 +80,10 @@ const CreateEvent = () => {
       title: title.trim(),
       description: description.trim(),
       eventType,
-
       thumbnail: thumbnail.trim(),
       location: location.trim(),
       eventDate: eventDate.toISOString(),
-      creatorEmail: creatorEmail,
+      creatorEmail,
     };
 
     setLoading(true);
@@ -103,7 +106,6 @@ const CreateEvent = () => {
         timer: 1500,
       });
 
-      //  ManageEvents
       setFormData({
         title: "",
         description: "",
@@ -127,95 +129,97 @@ const CreateEvent = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden relative">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-success overflow-hidden relative">
+      <div className="max-w-4xl w-full mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-green-700 mb-4 dark:text-green-400">
+          <h1 className="text-5xl font-bold text-primary-content mb-4">
             নতুন ইভেন্ট তৈরি করুন
           </h1>
-          <p className="text-xl text-black dark:text-white">
+          <p className="text-xl text-primary-content/80">
             সমাজের জন্য একটি নতুন উদ্যোগ শুরু করুন
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-10 dark:bg-gray-800 dark:shadow-none dark:border dark:border-gray-700">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <input
-              type="text"
-              placeholder="ইভেন্টের নাম *"
-              value={formData.title}
-              onChange={(e) => handleChange("title")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              required
-            />
+        <div className="card bg-base-100 shadow-2xl p-8 md:p-10">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="ইভেন্টের নাম *"
+                value={formData.title}
+                onChange={(e) => handleChange("title")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <textarea
-              placeholder="বিস্তারিত বিবরণ *"
-              rows="5"
-              value={formData.description}
-              onChange={(e) => handleChange("description")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg resize-none text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              required
-            />
+            <div className="form-control">
+              <textarea
+                placeholder="বিস্তারিত বিবরণ *"
+                rows={5}
+                value={formData.description}
+                onChange={(e) => handleChange("description")(e.target.value)}
+                className="textarea textarea-bordered w-full text-lg resize-none"
+                required
+              />
+            </div>
 
-            <select
-              value={formData.eventType}
-              onChange={(e) => handleChange("eventType")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600"
-              required
-            >
-              <option value="" className="dark:bg-gray-700">
-                -- ইভেন্টের ধরন বাছাই করুন --
-              </option>
-              <option value="Education" className="dark:bg-gray-700">
-                শিক্ষা
-              </option>
-              <option value="Cleanup" className="dark:bg-gray-700">
-                পরিচ্ছন্নতা অভিযান
-              </option>
-              <option value="Plantation" className="dark:bg-gray-700">
-                গাছ লাগানো
-              </option>
-              <option value="Donation" className="dark:bg-gray-700">
-                দান সংগ্রহ
-              </option>
-            </select>
+            <div className="form-control">
+              <select
+                value={formData.eventType}
+                onChange={(e) => handleChange("eventType")(e.target.value)}
+                className="select select-bordered w-full text-lg"
+                required
+              >
+                <option value="">-- ইভেন্টের ধরন বাছাই করুন --</option>
+                <option value="Education">শিক্ষা</option>
+                <option value="Cleanup">পরিচ্ছন্নতা অভিযান</option>
+                <option value="Plantation">গাছ লাগানো</option>
+                <option value="Donation">দান সংগ্রহ</option>
+              </select>
+            </div>
 
-            <input
-              type="url"
-              placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
-              value={formData.thumbnail}
-              onChange={(e) => handleChange("thumbnail")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              required
-            />
+            <div className="form-control">
+              <input
+                type="url"
+                placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
+                value={formData.thumbnail}
+                onChange={(e) => handleChange("thumbnail")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
-              value={formData.location}
-              onChange={(e) => handleChange("location")(e.target.value)}
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              required
-            />
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
+                value={formData.location}
+                onChange={(e) => handleChange("location")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <DatePicker
-              selected={formData.eventDate}
-              onChange={(date) => handleChange("eventDate")(date)}
-              showTimeSelect
-              timeFormat="h:mm aa"
-              dateFormat="dd MMMM, yyyy - h:mm aa"
-              minDate={new Date()}
-              placeholderText="তারিখ ও সময় বাছাই করুন *"
-              className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-lg text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              required
-            />
+            <div className="form-control">
+              <DatePicker
+                selected={formData.eventDate}
+                onChange={(date) => handleChange("eventDate")(date)}
+                showTimeSelect
+                timeFormat="h:mm aa"
+                dateFormat="dd MMMM, yyyy - h:mm aa"
+                minDate={new Date()}
+                placeholderText="তারিখ ও সময় বাছাই করুন *"
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`w-full px-6 py-4 bg-green-600 text-white text-lg font-bold rounded-xl hover:bg-green-700 transition transform hover:scale-105 ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
+              className={`btn btn-primary w-full text-lg font-bold ${
+                loading ? "loading" : ""
               }`}
             >
               {loading ? "তৈরি হচ্ছে..." : "ইভেন্ট তৈরি করুন"}

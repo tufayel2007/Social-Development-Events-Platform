@@ -16,7 +16,6 @@ const FooterBottom = ({ currentYear }) => {
   return (
     <>
       <div className="border-t border-gray-700 dark:border-gray-600 pt-6 flex flex-col lg:flex-row justify-between items-center text-xs text-gray-400 gap-4">
-        {/* কপিরাইট */}
         <p className="text-center lg:text-left">
           © {currentYear} <span className="text-green-400 font-bold">SDEP</span>
           . All rights reserved.
@@ -26,7 +25,6 @@ const FooterBottom = ({ currentYear }) => {
           by <em className="text-green-400 font-medium">Tufayel</em>
         </p>
 
-        {/* পলিসি লিংকস */}
         <div className="flex flex-wrap justify-center gap-4">
           {policyLinks.map((item) => (
             <a
@@ -46,7 +44,6 @@ const FooterBottom = ({ currentYear }) => {
           ))}
         </div>
 
-        {/* ভাষা ও মুদ্রা নির্বাচক */}
         <div className="flex items-center gap-4">
           <button
             className="flex items-center gap-1 text-xs hover:text-green-400 transition-colors"
@@ -65,7 +62,6 @@ const FooterBottom = ({ currentYear }) => {
         </div>
       </div>
 
-      {/* স্লোগান */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

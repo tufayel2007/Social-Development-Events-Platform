@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, X, Sun, Moon } from "lucide-react";
+import { Search, Filter, Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+// তোমার পথ অনুযায়ী
 
 const eventTypes = [
   { value: "", label: "সব ধরন" },
@@ -16,33 +18,37 @@ const EventFilters = ({
   setSearchTerm,
   selectedType,
   setSelectedType,
-  darkMode,
-  setDarkMode,
 }) => {
+  const { mode, toggle } = useTheme(); // গ্লোবাল থিম
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
       className="mb-10"
     >
-      <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl p-5 border border-gray-200 dark:border-gray-700">
+      <div className="bg-base-200/95 backdrop-blur-xl rounded-3xl shadow-2xl p-5 border border-base-300">
         <div className="flex flex-col md:flex-row gap-3 items-center">
+          {/* Search Input */}
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5 pointer-events-none" />
             <input
               type="text"
               placeholder="ইভেন্ট খুঁজুন..."
+              value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-10 py-4 text-base rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-emerald-500 dark:focus:border-emerald-400 outline-none transition-all bg-transparent text-gray-800 dark:text-gray-100"
+              className="input input-bordered w-full pl-12 pr-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
+          {/* Type Filter */}
           <div className="relative">
-            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 w-5 h-5" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50 w-5 h-5 pointer-events-none" />
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="pl-12 pr-10 py-4 text-base rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-emerald-500 dark:focus:border-emerald-400 outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 appearance-none cursor-pointer"
+              className="select select-bordered w-full max-w-xs pl-12 pr-10 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
             >
               {eventTypes.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -52,15 +58,13 @@ const EventFilters = ({
             </select>
           </div>
 
+          {/* Theme Toggle */}
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-4 bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-purple-600 dark:to-pink-600 rounded-2xl shadow-lg hover:shadow-xl transition-transform hover:scale-110"
+            onClick={toggle}
+            className="btn btn-circle btn-primary shadow-lg hover:shadow-xl transition-transform hover:scale-110"
+            aria-label="Toggle theme"
           >
-            {darkMode ? (
-              <Sun className="w-6 h-6 text-yellow-200" />
-            ) : (
-              <Moon className="w-6 h-6 text-gray-800" />
-            )}
+            {mode === "dark" ? <Sun size={22} /> : <Moon size={22} />}
           </button>
         </div>
       </div>

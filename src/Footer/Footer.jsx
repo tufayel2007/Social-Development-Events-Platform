@@ -1,4 +1,3 @@
-// Footer.jsx
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,56 +8,38 @@ import {
   Instagram,
   Linkedin,
   Youtube,
-  Rss,
-  ChevronDown,
-  ChevronUp,
   Mail,
   Phone,
   MapPin,
-  Globe,
   Shield,
   Truck,
   RefreshCw,
-  Headphones,
   ArrowUp,
   MessageCircle,
-  Download,
-  Award,
-  Languages,
-  DollarSign,
+  CheckCircle,
+  AlertCircle,
   Leaf,
   Heart,
   Sparkles,
   Zap,
-  Star,
   Coffee,
-  Sun,
-  Moon,
-  Send,
-  CheckCircle,
-  AlertCircle,
-  Copy,
-  ExternalLink,
+  Award,
 } from "lucide-react";
 import FooterTop from "./FooterTop";
 import FooterMiddle from "./FooterMiddle";
 import FooterBottom from "./FooterBottom";
+import { useTheme } from "../context/ThemeContext";
 
 const Footer = () => {
+  const { mode } = useTheme();
   const [email, setEmail] = useState("");
   const [openSection, setOpenSection] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setDarkMode(prefersDark);
-
     const handleScroll = () => setScrolled(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -66,101 +47,69 @@ const Footer = () => {
 
   const footerLinks = [
     {
-      title: "Company",
+      title: "কোম্পানি",
       icon: <Sparkles size={16} />,
       links: [
-        { text: "Home", href: "/", icon: <Leaf size={14} /> },
-        { text: "About Us", href: "/about", icon: <Heart size={14} /> },
-        { text: "Contact", href: "/contact", icon: <Mail size={14} /> },
-        { text: "Careers", href: "/careers", icon: <Zap size={14} /> },
-        { text: "Blog", href: "/blog", icon: <Coffee size={14} /> },
+        { text: "হোম", icon: <Leaf size={14} />, href: "/" },
+        { text: "আমাদের সম্পর্কে", icon: <Heart size={14} /> },
+        { text: "যোগাযোগ", href: "/helpDesk", icon: <Mail size={14} /> },
+        { text: "ক্যারিয়ার", icon: <Zap size={14} /> },
+        { text: "ব্লগ", icon: <Coffee size={14} /> },
       ],
     },
     {
-      title: "Services",
-      icon: <Star size={16} />,
+      title: "সার্ভিস",
+      icon: <Award size={16} />,
       links: [
-        { text: "Plant Care", href: "/services/plant-care" },
-        { text: "Interior Design", href: "/services/interior-design" },
-        { text: "Corporate Gifting", href: "/services/gifting" },
-        { text: "Workshops", href: "/services/workshops" },
-        { text: "Consultation", href: "/services/consultation" },
+        { text: "গাছের যত্ন" },
+        { text: "ইন্টেরিয়র ডিজাইন" },
+        { text: "কর্পোরেট গিফটিং" },
+        { text: "ওয়ার্কশপ" },
+        { text: "পরামর্শ" },
       ],
     },
     {
-      title: "Account",
+      title: "একাউন্ট",
       icon: <Shield size={16} />,
       links: [
-        { text: "My Profile", href: "/account/profile" },
-        { text: "Order History", href: "/account/orders" },
-        { text: "Wishlist", href: "/account/wishlist" },
-        { text: "Addresses", href: "/account/addresses" },
-        { text: "Support", href: "/support" },
+        { text: "আমার প্রোফাইল" },
+        { text: "অর্ডার হিস্ট্রি" },
+        { text: "উইশলিস্ট" },
+        { text: "ঠিকানা" },
+        { text: "সাপোর্ট" },
       ],
     },
     {
-      title: "Learn",
-      icon: <Globe size={16} />,
+      title: "শিখুন",
+      icon: <Mail size={16} />,
       links: [
-        { text: "Plant Guide", href: "/learn/guide" },
-        { text: "Care Tips", href: "/learn/tips" },
-        { text: "Sustainability", href: "/learn/sustainability" },
-        { text: "FAQ", href: "/faq" },
-        { text: "Video Tutorials", href: "/learn/videos" },
+        { text: "গাছের গাইড" },
+        { text: "যত্ন টিপস" },
+        { text: "সাসটেইনেবিলিটি" },
+        { text: "FAQ" },
+        { text: "ভিডিও টিউটোরিয়াল" },
       ],
     },
   ];
 
   const socialLinks = [
-    {
-      icon: Facebook,
-      href: "https://facebook.com",
-      label: "Facebook",
-      color: "bg-blue-600",
-    },
-    {
-      icon: Twitter,
-      href: "https://twitter.com",
-      label: "Twitter",
-      color: "bg-sky-500",
-    },
-    {
-      icon: Instagram,
-      href: "https://instagram.com",
-      label: "Instagram",
-      color: "bg-pink-600",
-    },
-    {
-      icon: Linkedin,
-      href: "https://linkedin.com",
-      label: "LinkedIn",
-      color: "bg-blue-800",
-    },
-    {
-      icon: Youtube,
-      href: "https://youtube.com",
-      label: "YouTube",
-      color: "bg-red-600",
-    },
+    { icon: Facebook, label: "Facebook" },
+    { icon: Twitter, label: "Twitter" },
+    { icon: Instagram, label: "Instagram" },
+    { icon: Linkedin, label: "LinkedIn" },
+    { icon: Youtube, label: "YouTube" },
   ];
 
   const quickInfo = [
-    {
-      icon: Phone,
-      text: "+880 123 456 789",
-      label: "Call Us",
-      href: "tel:+880123456789",
-    },
+    { icon: Phone, text: "+880 123 456 789", href: "tel:+880123456789" },
     {
       icon: Mail,
       text: "hello@greennest.com",
-      label: "Email Us",
       href: "mailto:hello@greennest.com",
     },
     {
       icon: MapPin,
       text: "Dhaka, Bangladesh",
-      label: "Visit Us",
       href: "https://maps.google.com",
     },
   ];
@@ -175,13 +124,13 @@ const Footer = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Please enter a valid email!", { icon: <AlertCircle /> });
+      toast.error("সঠিক ইমেইল লিখুন।", { icon: <AlertCircle /> });
       return;
     }
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    toast.success(`Welcome to GreenNest, ${email.split("@")[0]}!`, {
-      icon: <CheckCircle className="text-green-500" />,
+    toast.success(`স্বাগতম, ${email.split("@")[0]}!`, {
+      icon: <CheckCircle className="text-success" />,
       duration: 4000,
     });
     setEmail("");
@@ -199,6 +148,7 @@ const Footer = () => {
         toastOptions={{ className: "font-medium" }}
       />
 
+      {/* Back to Top */}
       <AnimatePresence>
         {scrolled && (
           <motion.button
@@ -206,47 +156,43 @@ const Footer = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-green-500 to-emerald-600 text-white p-3 rounded-full shadow-2xl hover:shadow-green-500/50 transition-all"
-            aria-label="Back to top"
+            className="fixed bottom-6 right-6 z-50 btn btn-primary btn-circle shadow-2xl"
+            aria-label="উপরে যান"
           >
             <ArrowUp size={24} />
           </motion.button>
         )}
       </AnimatePresence>
 
+      {/* Live Chat */}
       <motion.button
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2 }}
-        className="fixed bottom-20 right-6 z-50 bg-gradient-to-br from-teal-500 to-cyan-600 text-white p-3 rounded-full shadow-2xl hover:shadow-teal-500/50 transition-all"
-        aria-label="Live Chat"
+        className="fixed bottom-20 right-6 z-50 btn btn-success btn-circle shadow-2xl"
+        aria-label="লাইভ চ্যাট"
       >
         <MessageCircle size={24} />
       </motion.button>
 
-      <footer
-        className={`bg-gradient-to-b from-[#0f172a] via-[#1a1c2e] to-[#24263b] text-white pt-16 pb-8 ${
-          darkMode ? "dark" : ""
-        }`}
-        id="footer"
-      >
+      {/* Main Footer */}
+      <footer className="bg-base-300 text-base-content pt-16 pb-8" id="footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Promo Banner */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
-            className="bg-gradient-to-r from-green-600 to-emerald-700 text-white p-4 rounded-2xl mb-12 text-center shadow-lg"
+            className="alert alert-success rounded-2xl mb-12 shadow-lg text-center"
           >
-            <p className="text-sm font-bold">
-              Limited Time: Get <span className="text-yellow-300">20% OFF</span>{" "}
-              on First Order! Use Code:{" "}
-              <span className="font-mono bg-black/30 px-2 py-1 rounded">
-                SDEP
-              </span>
-            </p>
+            <span className="font-bold">
+              সীমিত সময়: প্রথম অর্ডারে{" "}
+              <span className="text-warning">20% ছাড়</span>! কোড ব্যবহার করুন:{" "}
+              <kbd className="kbd kbd-sm">SDEP</kbd>
+            </span>
           </motion.div>
 
-          {/* FooterTop রেন্ডার */}
+          {/* FooterTop */}
           <FooterTop
             email={email}
             setEmail={setEmail}
@@ -256,7 +202,7 @@ const Footer = () => {
             certifications={certifications}
           />
 
-          {/* FooterMiddle রেন্ডার */}
+          {/* FooterMiddle */}
           <FooterMiddle
             footerLinks={footerLinks}
             openSection={openSection}
@@ -264,7 +210,7 @@ const Footer = () => {
             quickInfo={quickInfo}
           />
 
-          {/* FooterBottom রেন্ডার */}
+          {/* FooterBottom */}
           <FooterBottom currentYear={currentYear} />
         </div>
       </footer>

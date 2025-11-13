@@ -12,7 +12,6 @@ import {
   Zap,
 } from "lucide-react";
 
-// Helper function to get correct DaisyUI classes (supports dark mode)
 const getStatClasses = (color) => {
   const map = {
     primary: "bg-primary text-primary-content",
@@ -53,7 +52,6 @@ const StatsSection = () => {
   return (
     <section className="py-16 md:py-24 px-6 bg-base-100 text-base-content transition-colors duration-500">
       <div className="max-w-6xl mx-auto text-center">
-        {/* Header */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,7 +64,6 @@ const StatsSection = () => {
           প্রতিটি সংখ্যার পেছনে আছে একেকটি অনুপ্রেরণার গল্প
         </p>
 
-        {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => {
             const Icon = stat.icon;
@@ -79,7 +76,6 @@ const StatsSection = () => {
                 className="card bg-base-200 border border-base-300 shadow-xl hover:shadow-2xl transition-transform duration-300 hover:scale-105"
               >
                 <div className="card-body items-center text-center">
-                  {/* Fixed: DaisyUI dark mode compatible classes */}
                   <div
                     className={`p-4 rounded-full shadow-md mb-4 ${getStatClasses(
                       stat.color

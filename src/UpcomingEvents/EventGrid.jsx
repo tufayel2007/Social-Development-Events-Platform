@@ -1,15 +1,12 @@
 /* eslint-disable no-unused-vars */
-
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 
 import EventCardUpcaming from "./EventCardUpcaming";
 import ShimmerLoader from "./ShimmerLoader";
 
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-
+// Pagination Component
 const Pagination = ({ currentPage, totalPages, goToPage }) => {
-  const pages = [];
-
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -18,9 +15,8 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
-  for (let i = startPage; i <= endPage; i++) {
-    pages.push(i);
-  }
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) pages.push(i);
 
   return (
     <motion.div
@@ -28,48 +24,47 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-center items-center gap-2 mt-12"
     >
+      {/* Prev Button */}
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`p-2.5 rounded-full transition-all duration-300 ${
-          currentPage === 1
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "bg-white dark:bg-gray-800 text-emerald-600 shadow-md hover:bg-emerald-50 dark:hover:bg-gray-700"
+        className={`btn btn-circle btn-sm ${
+          currentPage === 1 ? "btn-disabled" : "btn-ghost"
         }`}
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft size={20} />
       </button>
 
+      {/* Page Numbers */}
       {pages.map((page) => (
         <button
           key={page}
           onClick={() => goToPage(page)}
-          className={`px-4 py-2 rounded-xl font-bold transition-all ${
-            page === currentPage
-              ? "bg-emerald-600 text-white shadow-lg scale-105"
-              : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 hover:bg-emerald-50 dark:hover:bg-gray-700"
+          className={`btn btn-sm ${
+            page === currentPage ? "btn-primary" : "btn-ghost"
           }`}
         >
           {page.toLocaleString("bn-BD")}
         </button>
       ))}
 
+      {/* Next Button */}
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`p-2.5 rounded-full transition-all duration-300 ${
-          currentPage === totalPages
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "bg-white dark:bg-gray-800 text-emerald-600 shadow-md hover:bg-emerald-50 dark:hover:bg-gray-700"
+        className={`btn btn-circle btn-sm ${
+          currentPage === totalPages ? "btn-disabled" : "btn-ghost"
         }`}
       >
-        <ChevronRight className="w-5 h-5" />
+        <ChevronRight size={20} />
       </button>
     </motion.div>
   );
 };
 
+// Main EventGrid Component
 const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
+  // Loading State
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -80,6 +75,7 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
     );
   }
 
+  // Empty State
   if (events.length === 0) {
     return (
       <motion.div
@@ -87,20 +83,22 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-32"
       >
-        <div className="bg-gray-200 dark:bg-gray-700 border-2 border-dashed rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
-          <Search className="w-20 h-20 text-gray-400 dark:text-gray-500" />
+        <div className="bg-base-300 border-2 border-dashed rounded-3xl w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+          <Search className="w-20 h-20 text-base-content/40" />
         </div>
-        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+        <p className="text-3xl font-bold text-base-content">
           কোনো ইভেন্ট পাওয়া যায়নি
         </p>
       </motion.div>
     );
   }
 
+  // Success State
   return (
     <>
       <motion.div
         key={currentPage}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
@@ -111,6 +109,7 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
         </AnimatePresence>
       </motion.div>
 
+      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}

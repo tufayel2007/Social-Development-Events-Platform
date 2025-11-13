@@ -55,16 +55,14 @@ const UpdateEvent = () => {
       return null;
     }
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-teal-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-base-100">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
-  let creatorEmail = auth.currentUser.email;
-  if (!creatorEmail && auth.currentUser.providerData?.length > 0) {
-    creatorEmail = auth.currentUser.providerData[0].email;
-  }
+  const creatorEmail =
+    auth.currentUser.email || auth.currentUser.providerData?.[0]?.email;
 
   if (eventData.creatorEmail !== creatorEmail) {
     Swal.fire({
@@ -102,17 +100,13 @@ const UpdateEvent = () => {
     }
 
     const updatedData = {
-      ...formData,
-      thumbnail: thumbnail.trim(),
+      title: title.trim(),
+      description: description.trim(),
+      eventType,
       location: location.trim(),
       eventDate: eventDate.toISOString(),
-      creatorEmail: creatorEmail,
+      creatorEmail,
     };
-
-    if (updatedData.thumbnail) {
-      // updatedData.thumbnail = updatedData.thumbnail;
-      delete updatedData.thumbnail;
-    }
 
     setLoading(true);
 
@@ -146,91 +140,100 @@ const UpdateEvent = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const inputStyle =
-    "w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:border-green-600 focus:ring-4 focus:ring-green-100 focus:outline-none text-lg text-gray-800 placeholder-gray-500 transition duration-300";
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 px-4">
+    <div className="min-h-screen bg-base-100 py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-green-700 mb-4">
+          <h1 className="text-5xl font-bold text-primary mb-4">
             ইভেন্ট আপডেট করুন: {formData.title || "..."}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-base-content/70">
             আপনার উদ্যোগের বিবরণ পরিবর্তন করুন
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-10">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <input
-              type="text"
-              placeholder="ইভেন্টের নাম *"
-              value={formData.title}
-              onChange={(e) => handleChange("title")(e.target.value)}
-              className={inputStyle}
-              required
-            />
+        <div className="card bg-base-200 shadow-2xl p-8 md:p-10">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="ইভেন্টের নাম *"
+                value={formData.title}
+                onChange={(e) => handleChange("title")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <textarea
-              placeholder="বিস্তারিত বিবরণ *"
-              rows="5"
-              value={formData.description}
-              onChange={(e) => handleChange("description")(e.target.value)}
-              className={`${inputStyle} resize-none`}
-              required
-            />
+            <div className="form-control">
+              <textarea
+                placeholder="বিস্তারিত বিবরণ *"
+                rows={5}
+                value={formData.description}
+                onChange={(e) => handleChange("description")(e.target.value)}
+                className="textarea textarea-bordered w-full text-lg resize-none"
+                required
+              />
+            </div>
 
-            <select
-              value={formData.eventType}
-              onChange={(e) => handleChange("eventType")(e.target.value)}
-              className={inputStyle}
-              required
-            >
-              <option value="" disabled>
-                -- ইভেন্টের ধরন বাছাই করুন --
-              </option>
-              <option value="Education">শিক্ষা</option>
-              <option value="Cleanup">পরিচ্ছন্নতা অভিযান</option>
-              <option value="Plantation">গাছ লাগানো</option>
-              <option value="Donation">দান সংগ্রহ</option>
-            </select>
+            <div className="form-control">
+              <select
+                value={formData.eventType}
+                onChange={(e) => handleChange("eventType")(e.target.value)}
+                className="select select-bordered w-full text-lg"
+                required
+              >
+                <option value="" disabled>
+                  -- ইভেন্টের ধরন বাছাই করুন --
+                </option>
+                <option value="Education">শিক্ষা</option>
+                <option value="Cleanup">পরিচ্ছন্নতা অভিযান</option>
+                <option value="Plantation">গাছ লাগানো</option>
+                <option value="Donation">দান সংগ্রহ</option>
+              </select>
+            </div>
 
-            <input
-              type="url"
-              placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
-              value={formData.thumbnail}
-              onChange={(e) => handleChange("thumbnail")(e.target.value)}
-              className={inputStyle}
-              required
-            />
+            <div className="form-control">
+              <input
+                type="url"
+                placeholder="ছবির লিংক (ImgBB থেকে নিন) *"
+                value={formData.thumbnail}
+                onChange={(e) => handleChange("thumbnail")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
-              value={formData.location}
-              onChange={(e) => handleChange("location")(e.target.value)}
-              className={inputStyle}
-              required
-            />
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="স্থান (যেমন: মিরপুর ১০, ঢাকা) *"
+                value={formData.location}
+                onChange={(e) => handleChange("location")(e.target.value)}
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
-            <DatePicker
-              selected={formData.eventDate}
-              onChange={(date) => handleChange("eventDate")(date)}
-              showTimeSelect
-              timeFormat="h:mm aa"
-              dateFormat="dd MMMM, yyyy - h:mm aa"
-              minDate={new Date()}
-              placeholderText="তারিখ ও সময় বাছাই করুন *"
-              className={inputStyle}
-              required
-            />
+            <div className="form-control">
+              <DatePicker
+                selected={formData.eventDate}
+                onChange={(date) => handleChange("eventDate")(date)}
+                showTimeSelect
+                timeFormat="h:mm aa"
+                dateFormat="dd MMMM, yyyy - h:mm aa"
+                minDate={new Date()}
+                placeholderText="তারিখ ও সময় বাছাই করুন *"
+                className="input input-bordered w-full text-lg"
+                required
+              />
+            </div>
 
             <button
               type="submit"
               disabled={loading}
-              className={`w-full px-6 py-4 bg-green-600 text-white text-lg font-bold rounded-xl shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-[1.01] ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
+              className={`btn btn-primary w-full text-lg font-bold ${
+                loading ? "loading" : ""
               }`}
             >
               {loading ? "আপডেট হচ্ছে..." : "ইভেন্ট আপডেট করুন"}
