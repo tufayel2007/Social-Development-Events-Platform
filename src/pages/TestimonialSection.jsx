@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* src/components/home/TestimonialSection.jsx */
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -100,7 +100,6 @@ const TestimonialSection = () => {
             </div>
           </motion.div>
 
-          {/* Controls */}
           <button
             onClick={() =>
               setIndex(

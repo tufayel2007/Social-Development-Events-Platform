@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/UpcomingEvents/hooks/useEvents.js
+
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
@@ -13,7 +13,6 @@ export const useEvents = (searchTerm, selectedType) => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      // যদি প্রথম লোড না হয়, তবে লোডিং দেখান
       if (!initialLoad) {
         setLoading(true);
       }
@@ -38,13 +37,7 @@ export const useEvents = (searchTerm, selectedType) => {
       }
     };
 
-    // ডেটা লোড শুরু করার আগে একটি ছোট ডিলে যোগ করলে
-    // debounced search-এর ক্ষেত্রে UI লোডিং এ ভালো অভিজ্ঞতা পাওয়া যায় (ঐচ্ছিক)
-    // const delay = setTimeout(() => {
     fetchEvents();
-    // }, 100);
-
-    // return () => clearTimeout(delay);
   }, [searchTerm, selectedType]);
 
   const totalPages = Math.ceil(allEvents.length / EVENTS_PER_PAGE);

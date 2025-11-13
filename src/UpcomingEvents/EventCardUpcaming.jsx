@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { auth, onAuthStateChanged } from "../firebase/FirebaseConfig";
 import { useTheme } from "../context/ThemeContext";
-// তোমার পথ অনুযায়ী
 
 // Protected Link Component
 const ProtectedEventLink = ({ eventId, children }) => {
@@ -59,10 +58,8 @@ const EventCardUpcaming = React.memo(({ event, index }) => {
       transition={{ duration: 0.4, delay: index * 0.06 }}
       className="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-500 border border-base-300 group relative overflow-hidden"
     >
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
 
-      {/* Image */}
       <figure className="relative">
         {event.thumbnail ? (
           <img
@@ -81,7 +78,6 @@ const EventCardUpcaming = React.memo(({ event, index }) => {
           </div>
         )}
 
-        {/* Badge */}
         <div className="absolute top-4 right-4 z-20">
           <div className="badge badge-primary gap-1">
             <Sparkles size={14} />
@@ -90,7 +86,6 @@ const EventCardUpcaming = React.memo(({ event, index }) => {
         </div>
       </figure>
 
-      {/* Card Body */}
       <div className="card-body p-5 space-y-3 relative z-20">
         <h3 className="card-title text-base-content line-clamp-2 group-hover:text-primary transition-colors">
           {event.title || "শিরোনাম নেই"}
@@ -117,7 +112,6 @@ const EventCardUpcaming = React.memo(({ event, index }) => {
           </div>
         </div>
 
-        {/* CTA Button */}
         <ProtectedEventLink eventId={event._id}>
           <div className="card-actions mt-4">
             <button className="btn btn-primary w-full gap-2">

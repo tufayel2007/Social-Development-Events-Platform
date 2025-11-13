@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import EventCardUpcaming from "./EventCardUpcaming";
 import ShimmerLoader from "./ShimmerLoader";
 
-// Pagination Component
 const Pagination = ({ currentPage, totalPages, goToPage }) => {
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
@@ -24,7 +23,6 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-center items-center gap-2 mt-12"
     >
-      {/* Prev Button */}
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
@@ -35,7 +33,6 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
         <ChevronLeft size={20} />
       </button>
 
-      {/* Page Numbers */}
       {pages.map((page) => (
         <button
           key={page}
@@ -48,7 +45,6 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
         </button>
       ))}
 
-      {/* Next Button */}
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
@@ -62,9 +58,7 @@ const Pagination = ({ currentPage, totalPages, goToPage }) => {
   );
 };
 
-// Main EventGrid Component
 const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
-  // Loading State
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -75,7 +69,6 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
     );
   }
 
-  // Empty State
   if (events.length === 0) {
     return (
       <motion.div
@@ -93,7 +86,6 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
     );
   }
 
-  // Success State
   return (
     <>
       <motion.div
@@ -109,7 +101,6 @@ const EventGrid = ({ events, loading, currentPage, totalPages, goToPage }) => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}

@@ -164,7 +164,6 @@ const Footer = () => {
         )}
       </AnimatePresence>
 
-      {/* Live Chat */}
       <motion.button
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -175,10 +174,8 @@ const Footer = () => {
         <MessageCircle size={24} />
       </motion.button>
 
-      {/* Main Footer */}
       <footer className="bg-base-300 text-base-content pt-16 pb-8" id="footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Promo Banner */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -192,7 +189,6 @@ const Footer = () => {
             </span>
           </motion.div>
 
-          {/* FooterTop */}
           <FooterTop
             email={email}
             setEmail={setEmail}
@@ -202,7 +198,6 @@ const Footer = () => {
             certifications={certifications}
           />
 
-          {/* FooterMiddle */}
           <FooterMiddle
             footerLinks={footerLinks}
             openSection={openSection}
@@ -210,7 +205,6 @@ const Footer = () => {
             quickInfo={quickInfo}
           />
 
-          {/* FooterBottom */}
           <FooterBottom currentYear={currentYear} />
         </div>
       </footer>

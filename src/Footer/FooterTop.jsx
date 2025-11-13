@@ -23,7 +23,6 @@ const FooterTop = ({
 }) => {
   return (
     <div className="pb-10 border-b border-gray-700 dark:border-gray-600 flex flex-col lg:flex-row justify-between items-start gap-12">
-      {/* 1. লোগো এবং ব্র্যান্ডিং */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -45,7 +44,6 @@ const FooterTop = ({
         </div>
       </motion.div>
 
-      {/* 2. সোশ্যাল মিডিয়া লিংকস */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +75,6 @@ const FooterTop = ({
         </div>
       </motion.div>
 
-      {/* 3. নিউজলেটার এবং সার্টিফিকেশন */}
       <motion.div
         initial={{ opacity: 0, x: 30 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -125,7 +122,6 @@ const FooterTop = ({
           </motion.button>
         </form>
 
-        {/* সার্টিফিকেশন ব্যাজ */}
         <div className="flex flex-wrap gap-3 mt-6">
           {certifications.map((cert, i) => {
             const Icon = cert.icon;

@@ -13,7 +13,7 @@ const UpcomingEvents = () => {
   const [selectedType, setSelectedType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Debounced Search
+  // Debounc
   const debouncedSearch = useMemo(() => {
     let timeout;
     return (value) => {
@@ -36,7 +36,6 @@ const UpcomingEvents = () => {
     <>
       <AnimatePresence>{initialLoad && <FullPageLoader />}</AnimatePresence>
 
-      {/* Main Container */}
       <div className="min-h-screen bg-base-100 py-16 px-4">
         <Toaster
           position="top-right"
@@ -44,7 +43,6 @@ const UpcomingEvents = () => {
         />
 
         <div className="max-w-7xl mx-auto">
-          {/* Hero Title */}
           <motion.div
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -59,7 +57,6 @@ const UpcomingEvents = () => {
             </p>
           </motion.div>
 
-          {/* Filters */}
           <EventFilters
             searchTerm={searchTerm}
             setSearchTerm={debouncedSearch}

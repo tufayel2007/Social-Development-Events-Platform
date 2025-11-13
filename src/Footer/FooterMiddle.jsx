@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// FooterMiddle.jsx
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,7 +12,6 @@ const FooterMiddle = ({
 }) => {
   return (
     <>
-      {/* লিংক কলামস */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-8 py-12">
         {footerLinks.map((column, i) => (
           <motion.div
@@ -24,7 +22,6 @@ const FooterMiddle = ({
             transition={{ delay: i * 0.1 }}
             className="col-span-1"
           >
-            {/* মোবাইল ভিউ - অ্যাকর্ডিয়ন */}
             <div className="md:hidden">
               <button
                 onClick={() => setOpenSection(openSection === i ? null : i)}
@@ -69,7 +66,6 @@ const FooterMiddle = ({
               </AnimatePresence>
             </div>
 
-            {/* ডেস্কটপ ভিউ */}
             <div className="hidden md:block">
               <h4 className="text-lg font-bold text-green-400 border-b-2 border-green-500 pb-1 mb-4 inline-block flex items-center gap-2">
                 {column.icon} {column.title}
@@ -101,7 +97,6 @@ const FooterMiddle = ({
         ))}
       </div>
 
-      {/* কুইক ইনফো সেকশন */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

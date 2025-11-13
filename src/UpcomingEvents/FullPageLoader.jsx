@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// src/pages/UpcomingEvents/components/FullPageLoader.jsx
+
 import React from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
@@ -13,7 +13,6 @@ const FullPageLoader = () => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-base-100/90 backdrop-blur-sm"
     >
       <div className="text-center">
-        {/* Rotating Icon */}
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -24,7 +23,6 @@ const FullPageLoader = () => {
           </div>
         </motion.div>
 
-        {/* Title */}
         <motion.h2
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -34,7 +32,6 @@ const FullPageLoader = () => {
           ইভেন্ট লোড হচ্ছে...
         </motion.h2>
 
-        {/* Subtitle */}
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

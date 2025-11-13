@@ -57,17 +57,24 @@ const Navbar = () => {
 
   if (loading) {
     return (
-      <div className="navbar bg-base-100 shadow-md sticky top-0 z-50 h-16 flex items-center justify-center">
-        <span className="loading loading-spinner text-primary"></span>
+      <div
+        className="navbar bg-base-100 shadow-md sticky
+       top-0 z-50 h-16 flex items-center justify-center"
+      >
+        <span
+          className="loading loading-spinner
+         text-primary"
+        ></span>
       </div>
     );
   }
 
   return (
-    <div className="navbar bg-base-100 text-base-content shadow-md sticky top-0 z-50 transition-colors duration-300">
-      {/* Left */}
+    <div
+      className="navbar bg-base-100 text-base-content
+     shadow-md sticky top-0 z-50 transition-colors duration-300"
+    >
       <div className="navbar-start">
-        {/* Mobile dropdown */}
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
@@ -85,33 +92,41 @@ const Navbar = () => {
               />
             </svg>
           </label>
-          <ul className="menu menu-sm dropdown-content mt-3 p-3 shadow bg-base-100 rounded-box w-52">
+          <ul
+            className="menu menu-sm dropdown-content mt-3 p-3 
+          shadow bg-base-100 rounded-box w-52"
+          >
             {navLinks}
           </ul>
         </div>
 
-        {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2">
           <img
             src={logoIMG}
             alt="Logo"
-            className="w-9 h-9 rounded-full object-cover border border-base-300"
+            className="w-9 h-9 rounded-full object-cover border
+             border-base-300"
           />
-          <span className="hidden md:inline-flex font-bold text-xl text-primary">
+          <span
+            className="hidden md:inline-flex font-bold 
+          text-xl text-primary"
+          >
             Social Development Events Platform
           </span>
-          <span className="md:hidden font-bold text-lg text-primary">SDEP</span>
+          <span
+            className="md:hidden font-bold 
+          text-lg text-primary"
+          >
+            SDEP
+          </span>
         </NavLink>
       </div>
 
-      {/* Center nav */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2">{navLinks}</ul>
       </div>
 
-      {/* Right */}
       <div className="navbar-end flex items-center gap-3">
-        {/* Theme toggle */}
         <button
           onClick={toggleTheme}
           className="btn btn-ghost btn-circle"
@@ -124,11 +139,11 @@ const Navbar = () => {
           )}
         </button>
 
-        {/* User menu */}
         {!user ? (
           <NavLink
             to="/login"
-            className="btn btn-primary btn-sm md:btn-md font-bold text-primary-content"
+            className="btn btn-primary btn-sm 
+            md:btn-md font-bold text-primary-content"
           >
             Login
           </NavLink>
@@ -136,9 +151,13 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <label
               tabIndex={0}
-              className="btn btn-ghost btn-circle avatar group"
+              className="btn
+               btn-ghost btn-circle avatar group"
             >
-              <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
+              <div
+                className="w-10 h-10 rounded-full 
+              ring ring-primary ring-offset-2 ring-offset-base-100"
+              >
                 {user.photoURL ? (
                   <img
                     src={user.photoURL}
@@ -150,13 +169,28 @@ const Navbar = () => {
                   <FaUserCircle className="w-full h-full text-base-content/40" />
                 )}
               </div>
-              <div className="absolute hidden group-hover:block bg-base-300 text-base-content text-xs rounded px-2 py-1 -left-6 top-12 whitespace-nowrap z-10 shadow">
+              <div
+                className="absolute hidden group-hover:block 
+              bg-base-300 text-base-content text-xs
+               rounded px-2 
+              py-1 -left-6 top-12 whitespace-nowrap
+              
+              z-10 shadow"
+              >
                 {user.displayName}
               </div>
             </label>
 
-            <ul className="menu menu-sm dropdown-content mt-3 p-3 shadow bg-base-100 rounded-box w-56 border border-base-300">
-              <li className="menu-title text-center pb-2 border-b border-base-300">
+            <ul
+              className="menu menu-sm
+             dropdown-content
+             mt-3 p-3 shadow bg-base-100 
+            rounded-box w-56 border border-base-300"
+            >
+              <li
+                className="menu-title text-center
+               pb-2 border-b border-base-300"
+              >
                 <span className="font-bold">{user.displayName}</span>
               </li>
               <li>
@@ -174,7 +208,9 @@ const Navbar = () => {
               <li className="border-t border-base-300 mt-2 pt-2">
                 <button
                   onClick={handleLogout}
-                  className="text-error hover:bg-error hover:text-error-content w-full text-left"
+                  className="text-error hover:bg-error 
+                  hover:text-error-content w-full
+                   text-left"
                 >
                   Logout
                 </button>
