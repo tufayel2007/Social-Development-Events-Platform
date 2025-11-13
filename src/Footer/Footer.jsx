@@ -183,8 +183,9 @@ const Footer = () => {
             className="alert alert-success rounded-2xl mb-12 shadow-lg text-center"
           >
             <span className="font-bold">
-              সীমিত সময়: প্রথম অর্ডারে{" "}
-              <span className="text-warning">20% ছাড়</span>! কোড ব্যবহার করুন:{" "}
+              🌟✨ Social Development
+              <span className="text-warning">Events Platform: "Ekota"</span>!
+              (ঐক্য) 🤝
               <kbd className="kbd kbd-sm">SDEP</kbd>
             </span>
           </motion.div>
