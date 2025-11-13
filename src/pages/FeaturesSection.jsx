@@ -1,123 +1,194 @@
 /* eslint-disable no-unused-vars */
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Globe,
+  TreePine,
+  Heart,
+  BookOpen,
+  Droplets,
+  Stethoscope,
+  Shirt,
+  Utensils,
+  Backpack,
+  Hammer,
+  Users,
+  Recycle,
+  Trash2,
+  Building2,
+} from "lucide-react";
 
-import avatar1 from "../assets/Rahim.png";
-import avatar2 from "../assets/Fatema.png";
-import avatar3 from "../assets/Kamrool.png";
+const FeaturesSection = () => {
+  const features = [
+    {
+      icon: Globe,
+      title: "পরিবেশ পরিচ্ছন্নতা",
+      desc: "এলাকা পরিষ্কার রাখুন",
+      gradient: "from-emerald-500 to-teal-600",
+    },
+    {
+      icon: TreePine,
+      title: "বৃক্ষরোপণ",
+      desc: "প্রতি সপ্তাহে নতুন গাছ",
+      gradient: "from-lime-500 to-green-600",
+    },
+    {
+      icon: Heart,
+      title: "রক্তদান",
+      desc: "জীবন বাঁচান",
+      gradient: "from-red-500 to-pink-600",
+    },
+    {
+      icon: BookOpen,
+      title: "শিক্ষা সহায়তা",
+      desc: "গরিব শিশুদের পড়ান",
+      gradient: "from-blue-500 to-indigo-600",
+    },
+    {
+      icon: Droplets,
+      title: "পানি সরবরাহ",
+      desc: "গ্রামে বিশুদ্ধ পানি",
+      gradient: "from-cyan-500 to-blue-600",
+    },
+    {
+      icon: Stethoscope,
+      title: "স্বাস্থ্য ক্যাম্প",
+      desc: "ফ্রি চেকআপ",
+      gradient: "from-pink-500 to-rose-600",
+    },
+    {
+      icon: Shirt,
+      title: "কাপড় বিতরণ",
+      desc: "শীতের কাপড়",
+      gradient: "from-purple-500 to-violet-600",
+    },
+    {
+      icon: Utensils,
+      title: "খাদ্য সহায়তা",
+      desc: "ক্ষুধার্তদের খাওয়ান",
+      gradient: "from-orange-500 to-red-600",
+    },
+    {
+      icon: Backpack,
+      title: "স্কুল সামগ্রী",
+      desc: "বই-খাতা বিতরণ",
+      gradient: "from-indigo-500 to-purple-600",
+    },
+    {
+      icon: Hammer,
+      title: "ইনফ্রাস্ট্রাকচার",
+      desc: "রাস্তা মেরামত",
+      gradient: "from-yellow-500 to-amber-600",
+    },
+    {
+      icon: Users,
+      title: "সম্প্রদায় গঠন",
+      desc: "মিলনমেলা",
+      gradient: "from-teal-500 to-cyan-600",
+    },
+    {
+      icon: Globe,
+      title: "জলবায়ু সচেতনতা",
+      desc: "পরিবেশ শিক্ষা",
+      gradient: "from-green-500 to-emerald-600",
+    },
+    {
+      icon: Recycle,
+      title: "রিসাইক্লিং",
+      desc: "বর্জ্য পুনর্ব্যবহার",
+      gradient: "from-gray-500 to-zinc-600",
+    },
+    {
+      icon: Trash2,
+      title: "ডাস্টবিন",
+      desc: "পরিচ্ছন্নতা",
+      gradient: "from-zinc-500 to-gray-600",
+    },
+    {
+      icon: Building2,
+      title: "পাবলিক টয়লেট",
+      desc: "স্বাস্থ্যবিধি",
+      gradient: "from-stone-500 to-gray-600",
+    },
+  ];
 
-const testimonials = [
-  {
-    name: "রহিম আহমেদ",
-    role: "স্বেচ্ছাসেবী",
-    text: "এই প্ল্যাটফর্ম আমার জীবন বদলে দিয়েছে।",
-    avatar: avatar1,
-    rating: 5,
-  },
-  {
-    name: "ফাতেমা খাতুন",
-    role: "ইভেন্ট অর্গানাইজার",
-    text: "এক ক্লিকে ১০০+ মানুষ জয়েন করেছে!",
-    avatar: avatar2,
-    rating: 5,
-  },
-  {
-    name: "কামরুল ইসলাম",
-    role: "সদস্য",
-    text: "প্রতি সপ্তাহে নতুন কিছু করার সুযোগ পাই।",
-    avatar: avatar3,
-    rating: 5,
-  },
-];
-
-const TestimonialSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (inView) {
-      const timer = setInterval(() => {
-        setIndex((prev) => (prev + 1) % testimonials.length);
-      }, 5000);
-      return () => clearInterval(timer);
-    }
-  }, [inView]);
+  const cardVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.08,
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
     <section
-      ref={ref}
-      className="py-16 md:py-24 px-4 sm:px-6 lg:px-8
-                 bg-gradient-to-r from-base-300 to-base-200 text-base-content"
+      id="features"
+      className="py-24 px-6 bg-base-200 transition-colors duration-700"
     >
-      <div className="max-w-6xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-base-content mb-12"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ type: "spring", stiffness: 100 }}
+          className="text-4xl md:text-6xl font-extrabold text-center mb-20 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
         >
-          তারা কী বলছে
+          আমাদের <span className="text-primary">সেবাসমূহ</span>
         </motion.h2>
-        <div className="relative">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            className="bg-base-100/50 backdrop-blur-lg
-                       p-8 rounded-3xl shadow-2xl border border-base-content/20
-                       max-w-2xl mx-auto"
-          >
-            <Quote className="w-12 h-12 text-base-content/30 mx-auto mb-4" />
-            <p className="text-lg md:text-xl text-base-content italic mb-6">
-              "{testimonials[index].text}"
-            </p>
-            <div className="flex items-center justify-center gap-3">
-              <img
-                src={testimonials[index].avatar}
-                alt={testimonials[index].name}
-                className="w-14 h-14 rounded-full ring-4 ring-primary/50"
-              />
-              <div className="text-left">
-                <p className="font-bold text-base-content">
-                  {testimonials[index].name}
-                </p>
-                <p className="text-sm text-primary">
-                  {testimonials[index].role}
-                </p>
-              </div>
-            </div>
-            <div className="flex justify-center gap-1 mt-4">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-warning text-warning" />
-              ))}
-            </div>
-          </motion.div>
 
-          <button
-            onClick={() =>
-              setIndex(
-                (prev) => (prev - 1 + testimonials.length) % testimonials.length
-              )
-            }
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-base-100/30
-                       backdrop-blur rounded-full hover:bg-base-100/50 transition-all"
-          >
-            <ChevronLeft className="w-6 h-6 text-base-content" />
-          </button>
-          <button
-            onClick={() => setIndex((prev) => (prev + 1) % testimonials.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-base-100/30
-                       backdrop-blur rounded-full hover:bg-base-100/50 transition-all"
-          >
-            <ChevronRight className="w-6 h-6 text-base-content" />
-          </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <motion.div
+                key={i}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.3 }}
+                variants={cardVariants}
+                whileHover={{ y: -12, scale: 1.05 }}
+                className="group relative bg-base-100 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-base-300 overflow-hidden cursor-pointer"
+              >
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                />
+
+                <div className="relative z-10">
+                  <motion.div
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                    className="inline-flex p-4 rounded-2xl bg-base-200 mb-5 shadow-md"
+                  >
+                    <Icon className="w-10 h-10 text-primary" />
+                  </motion.div>
+
+                  <h3 className="text-2xl font-bold text-base-content mb-3">
+                    {f.title}
+                  </h3>
+
+                  <p className="text-base-content/70 text-sm leading-relaxed">
+                    {f.desc}
+                  </p>
+                </div>
+
+                <motion.div
+                  className="absolute inset-0 rounded-3xl bg-primary opacity-0 group-hover:opacity-20 blur-xl transition-opacity"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 };
 
-export default TestimonialSection;
+export default FeaturesSection;
