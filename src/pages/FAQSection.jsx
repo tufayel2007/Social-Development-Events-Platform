@@ -104,14 +104,39 @@ const FAQSection = () => {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4"
           >
-            <Sparkles className="w-4 h-4" />
-            সাহায্য কেন্দ্র
+            <Sparkles className="w-4 h-4 " />
+            <div
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r 
+               from-yellow-600 via-pink-600 to-cyan-600 
+               dark:from-yellow-400 dark:via-pink-400 dark:to-cyan-400 
+               bg-[length:200%_200%]"
+            >
+              {" "}
+              সাহায্য কেন্দ্র
+            </div>
           </motion.div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-800 dark:text-white">
-            প্রশ্ন আছে?{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
-              উত্তর এখানে
-            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600"></span>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              className="text-3xl md:text-5xl font-bold text-center mb-12"
+            >
+              <motion.span
+                animate={{ backgroundPosition: ["0% 50%", "100% 50%"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="inline-block text-transparent bg-clip-text bg-gradient-to-r 
+               from-yellow-600 via-pink-600 to-cyan-600 
+               dark:from-yellow-400 dark:via-pink-400 dark:to-cyan-400 
+               bg-[length:200%_200%]"
+                style={{
+                  backgroundSize: "200% 200%",
+                  backgroundPosition: "0% 50%",
+                }}
+              >
+                প্রশ্ন আছে? উত্তর এখানে
+              </motion.span>
+            </motion.h2>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             সবচেয়ে জিজ্ঞাসিত প্রশ্নের উত্তর এক ক্লিকে

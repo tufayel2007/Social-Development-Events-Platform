@@ -70,9 +70,25 @@ const StatsSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={startCount ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-extrabold mb-6"
+          className="text-4xl md:text-6xl font-extrabold mb-6 text-center"
         >
-          আমাদের <span className="text-primary">সাফল্য</span> এক নজরে
+          {" "}
+          <motion.span
+            animate={
+              startCount ? { backgroundPosition: ["0% 50%", "100% 50%"] } : {}
+            }
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            className="inline-block text-transparent bg-clip-text bg-gradient-to-r 
+               from-yellow-600 via-pink-600 to-cyan-600 
+               dark:from-yellow-400 dark:via-pink-400 dark:to-cyan-400 
+               bg-[length:200%_200%]"
+            style={{
+              backgroundSize: "200% 200%",
+              backgroundPosition: "0% 50%",
+            }}
+          >
+            আমাদের সাফল্য এক নজরে
+          </motion.span>{" "}
         </motion.h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

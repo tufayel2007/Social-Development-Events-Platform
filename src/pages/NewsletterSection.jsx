@@ -236,12 +236,15 @@ const NewsletterSection = () => {
               variants={itemVariants}
               className="inline-flex items-center gap-2 px-5 py-3 bg-white/20 backdrop-blur-md rounded-full text-white font-bold text-sm mb-6 border border-white/30"
             >
-              <Sparkles className="w-5 h-5" />
-              এক্সক্লুসিভ আপডেট
+              <Sparkles className="w-5 h-5 text-green-950" />
+              <div className="text-orange-400"> এক্সক্লুসিভ আপডেট</div>
             </motion.div>
 
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
-              <motion.span variants={itemVariants} className="inline-block">
+              <motion.span
+                variants={itemVariants}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-size-200"
+              >
                 প্রথম জানুন,{" "}
               </motion.span>
               <motion.span variants={itemVariants} className="inline-block">
@@ -258,7 +261,7 @@ const NewsletterSection = () => {
 
             <motion.p
               variants={itemVariants}
-              className="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto mb-10"
+              className="text-lg md:text-xl text-green-700 max-w-2xl mx-auto mb-10"
             >
               নতুন ইভেন্ট, টিপস, গিভঅ্যাওয়ে — সবার আগে আপনার ইনবক্সে!
             </motion.p>
@@ -441,19 +444,23 @@ const NewsletterSection = () => {
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.6 }}
-            className="flex flex-wrap justify-center gap-y-2 gap-x-6 mt-10 text-white/70 text-sm"
+            className="flex flex-wrap justify-center gap-y-2 gap-x-6 mt-10 text-green-800 text-sm"
           >
             <span className="flex items-center gap-1">
-              <CheckCircle className="w-4 h-4 text-emerald-300" />
+              <CheckCircle className="w-4 h-4 text-green-800" />
               স্প্যাম নয়
             </span>
             <span className="flex items-center gap-1">
-              <CheckCircle className="w-4 h-4 text-emerald-300" />১ ক্লিকে
+              <CheckCircle className="w-4 h-4 text-green-800" />১ ক্লিকে
               আনসাবস্ক্রাইব
             </span>
             <span className="flex items-center gap-1 font-bold text-white">
-              <CheckCircle className="w-4 h-4 text-emerald-300" />
-              {subscriberCount.toLocaleString("bn-BD")}+ সাবস্ক্রাইবার
+              <CheckCircle className="w-4 h-4 text-red-900" />
+              <div className="text-green-800">
+                {" "}
+                {subscriberCount.toLocaleString("bn-BD")}+{" "}
+              </div>
+              <span className="text-green-800">সাবস্ক্রাইবার</span>
             </span>
           </motion.div>
         </div>
