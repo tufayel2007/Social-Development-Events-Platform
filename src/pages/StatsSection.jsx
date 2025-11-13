@@ -1,16 +1,8 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
-import {
-  Users,
-  Calendar,
-  TreePine,
-  Heart,
-  TrendingUp,
-  Award,
-  Zap,
-} from "lucide-react";
+import { Users, Calendar, TreePine, Heart } from "lucide-react";
 
 const getStatClasses = (color) => {
   const map = {
@@ -23,11 +15,30 @@ const getStatClasses = (color) => {
 };
 
 const StatsSection = () => {
-  const [animated, setAnimated] = useState(false);
+  const [startCount, setStartCount] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setAnimated(true), 500);
-    return () => clearTimeout(timer);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStartCount(true);
+        } else {
+          setStartCount(false);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
   }, []);
 
   const stats = [
@@ -50,19 +61,19 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 px-6 bg-base-100 text-base-content transition-colors duration-500">
+    <section
+      ref={sectionRef}
+      className="py-16 md:py-24 px-6 bg-base-100 text-base-content"
+    >
       <div className="max-w-6xl mx-auto text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={startCount ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-4xl md:text-6xl font-extrabold mb-6"
         >
           আমাদের <span className="text-primary">সাফল্য</span> এক নজরে
         </motion.h2>
-        <p className="text-base-content/70 mb-12 max-w-2xl mx-auto">
-          প্রতিটি সংখ্যার পেছনে আছে একেকটি অনুপ্রেরণার গল্প
-        </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => {
@@ -71,7 +82,11 @@ const StatsSection = () => {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={
+                  startCount
+                    ? { opacity: 1, scale: 1 }
+                    : { opacity: 0, scale: 0.9 }
+                }
                 transition={{ delay: 0.2 + i * 0.1 }}
                 className="card bg-base-200 border border-base-300 shadow-xl hover:shadow-2xl transition-transform duration-300 hover:scale-105"
               >
@@ -85,17 +100,16 @@ const StatsSection = () => {
                   </div>
 
                   <h3 className="text-3xl font-extrabold">
-                    {animated ? (
+                    {startCount ? (
                       <CountUp
+                        start={0}
                         end={stat.end}
-                        duration={2}
+                        duration={2.5}
                         suffix={stat.suffix}
+                        useEasing={true}
                       />
                     ) : (
-                      <>
-                        {stat.end}
-                        {stat.suffix}
-                      </>
+                      <span>0{stat.suffix}</span>
                     )}
                   </h3>
                   <p className="font-semibold text-base-content/80">
