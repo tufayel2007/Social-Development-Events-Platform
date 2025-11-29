@@ -12,7 +12,7 @@
 
 | Domain                                   | Status             | Link                                                                                               |
 | :--------------------------------------- | :----------------- | :------------------------------------------------------------------------------------------------- |
-| **Live Website**                         | **✅ Online**      | **`https://social-dev-events.netlify.app`**                                                        |
+| **Live Website**                         | **✅ Online**      | **(https://sociale-development.vercel.app/)**                                                      |
 | **Client Repository (Frontend)**         | **📂 50+ commits** | **[GitHub Frontend](https://github.com/tufayel2007/Social-Development-Events-Platform.git)**       |
 | **Server Repository (Backend/Firebase)** | **📁 15+ commits** | **[GitHub Backend](https://github.com/tufayel2007/Social-Development-Events-Platform-Server.git)** |
 
